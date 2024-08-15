@@ -3,11 +3,11 @@
 ## Table of Contents
 
 ### Milestone 1
-1. Engaging Introduction (Landing page)
+1. [Engaging Introduction (Landing page)](./milestone_1/Engaging-Introduction.md)
 
-2. ICP Token Transfer and Verification 
+2. [ICP Token Transfer and Verification](./milestone_1/ICP-Token-Transfer-and-Verification.md)
 
-3. Understanding ICP Block Making and Computational Resource Management
+3. [Understanding ICP Block Making and Computational Resource Management](./milestone_1/Understanding-ICP-Block-Making-and-Computational-Resouce-Management.md)
 
 ### Milestone 2
 
