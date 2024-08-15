@@ -29,7 +29,7 @@ The Internet Computer (IC) is architecturally divided into subnets, with each su
 
 Due to the absence of a global block explorer, developers must implement their own mechanisms for tracking state changes and transactions within their canisters in order to have a functional audit trail. For example, the ICP Ledger tracks all transactions involving ICP tokens. The [ICP dashboard](https://dashboard.internetcomputer.org) provides an interface to view these transactions, showcasing how a canister can manage and display its own transaction history.
 
-![ICP Block Making](./assets/ICPBlock.png)
+![ICP Block Making](.././assets/ICPBlock.png)
 
 The block that we verified in the previous article was implemented at the canister level, not the ICP protocol level. This is what we meant by it is the developer’s duty to track the state changes and history.
 
