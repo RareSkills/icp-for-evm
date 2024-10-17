@@ -1,7 +1,5 @@
 # Local Canister Deployment and Interaction
 
-**Page URL: /deploy-canisters-locally**
-
 ![ICP New 2.jpg](Local%20Canister%20Deployment%20and%20Interaction/ICP_New_2.jpg)
 
 This tutorial guides you through deploying a Canister locally. Just as tools like Foundry, Hardhat, and Remix assist in building and testing Ethereum smart contracts off-chain, there is a similar set tools available for deploying and testing Canisters locally. Comparably:

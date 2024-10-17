@@ -1,7 +1,5 @@
 # Cross-Canister Calls and Sending ICP & Cycles from a Canister
 
-**Page URL: /cross-canister-calls-sending-icp-cycles**
-
 ![Cross_canister.jpg](/milestone_2/Cross-Canister%20Calls%20and%20Sending%20ICP%20&%20Cycles%20from%20a%20Canister/Cross_canister.jpg)
 
 In this article, you’ll learn how Canisters can invoke another canister’s function as well as transfer `ICP` and `Cycles`.

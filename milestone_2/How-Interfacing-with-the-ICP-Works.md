@@ -1,7 +1,5 @@
 # How Interfacing with the ICP Works
 
-**Page URL: /Interfacing-with-ICP**
-
 ![How Ineteracting with ICP works.jpg](How%20Interfacing%20with%20the%20ICP%20Works/How_Ineteracting_with_ICP_works.jpg)
 
 In Ethereum, developers use RPC providers like Infura or full nodes to handle transaction broadcasting and interaction with the network. On the Internet Computer (ICP), **Boundary Nodes** serve a similar function; they act as intermediaries that facilitate communication between external users and the ICP network.
