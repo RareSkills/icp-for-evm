@@ -11,14 +11,16 @@
 
 ### Milestone 2
 
-1. Entry Point nodes in ICP
+1. [How Interfacing with ICP Works](/milestone_2/How-Interfacing-with-the-ICP-Works.md)
 
-2. Deploy and Interact with a Canister Locally
+2. [Local Canister Deployment and Interaction](/milestone_2/Local-Canister-Deployment-and-Interaction.md)
 
-3. Transfering the ICP token from a Canister
+3. [Cross-Canister Calls and Sending ICP & Cycles from a Canister](/milestone_2/Cross-Canister-Calls-and-Sending-ICP-&-Cycles-from-a-Canister.md)
 
 ### Milestone 3
 1. Project: Create a Prototype Bank Canister on ICP
 
 2. Asynchronouse Execution in ICP
+
+3. Introduction to Canister Programming with Motoko and Rust
 
