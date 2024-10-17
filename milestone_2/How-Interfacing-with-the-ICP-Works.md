@@ -1,4 +1,4 @@
-# How Interfacing with the ICP Works
+# How Interfacing with ICP Works
 
 ![How Ineteracting with ICP works.jpg](How%20Interfacing%20with%20the%20ICP%20Works/How_Ineteracting_with_ICP_works.jpg)
 
