@@ -33,14 +33,3 @@ Towards the end of this course, you’ll build a cross-chain bridge canister tha
 #### Rust Prerequisites
 
 This course assumes you already know Rust, including ownership, borrowing, and basic datatypes. Since these topics have been extensively covered, we will focus on programming canisters in Rust.
-
-### Course Outline
-
-#### Module 1: Programming a Rust Canister
-
-* Hello World (and Developer Environment Installation)
-* Function Visibility and State Mutability
-* State/Storage Variables
-* State-Changing Functions: `#[ic_cdk::update]`
-* Safe Storage and Access with Thread Local Storage and RefCells
-* Composite Types
