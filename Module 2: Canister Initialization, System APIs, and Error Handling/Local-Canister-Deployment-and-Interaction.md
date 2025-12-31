@@ -1,7 +1,5 @@
 # Local Canister Deployment and Interaction
 
-![ICP New 2.jpg](../.gitbook/assets/ICP_New_2.jpg)
-
 This tutorial guides you through deploying a Canister locally. Just as tools like Foundry, Hardhat, and Remix assist in building and testing Ethereum smart contracts off-chain, there is a similar set tools available for deploying and testing Canisters locally. Comparably:
 
 * Remix IDE = `Motoko Playground`
@@ -23,11 +21,7 @@ Visit the [Motoko Playground website](https://m7sm4-2iaaa-aaaab-qabra-cai.raw.ic
 
 You should be greeted with several project templates to get started on, choose the `New Motoko project`.
 
-![Screenshot 2024-10-08 at 13.04.31.png](../.gitbook/assets/Screenshot_2024-10-08_at_13.04.31.png)
-
 Just like Remix, we can write the smart contract on the `editor section` and deploy it.
-
-![Screenshot 2024-10-08 at 13.13.54.png](../.gitbook/assets/b5cbe39a-e628-4359-91bb-d466832b9bc9.png)
 
 Within the `Editor`, copy paste the following codes written in **Motoko**:
 
@@ -53,19 +47,11 @@ The syntax may differ a bit, but from an overall point of view, they have a simi
 
 Copy pasted the `HelloWorld` actor contract, hit the deploy button on the top right.
 
-![Screenshot 2024-10-08 at 13.31.55.png](../.gitbook/assets/Screenshot_2024-10-08_at_13.31.55.png)
-
 Next, hit `Install`. This will compile your code and deploy it.
-
-![Screenshot 2024-10-08 at 13.33.23.png](../.gitbook/assets/Screenshot_2024-10-08_at_13.33.23.png)
 
 Once successfully deployed, you will be served the `Candid UI`, this is how we can interface with the actor function. The `Query` call invokes the smart contract function and returns the hardcoded string “Hello World!”.
 
-![Screenshot 2024-10-08 at 13.35.09.png](../.gitbook/assets/Screenshot_2024-10-08_at_13.35.09.png)
-
 `Candid UI`, is comparable to the `Deployed Contracts` section in Remix IDE. It’s an automatically generated interface that allows us to easily interact with the canister functions.
-
-![Screenshot 2024-10-12 at 20.01.57.png](../.gitbook/assets/Screenshot_2024-10-12_at_20.01.57.png)
 
 [Motoko Playground deploys canisters **online**](https://medium.com/dfinity/introducing-the-motoko-playground-an-online-development-environment-for-the-internet-computer-efb4cd09ea8b) directly to the Internet Computer (IC) network, making it ideal for quick prototyping and learning. However, it has limitations such as a 20 minute time limit and the inability to simulate cycles transaction. For a more complete developer experience, using **`dfx`** is as a more suitable.
 
@@ -89,11 +75,7 @@ sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)"
 
 Next, choose the default option.
 
-![Screenshot 2024-10-12 at 20.21.59.png](../.gitbook/assets/Screenshot_2024-10-12_at_20.21.59.png)
-
 Upon success, you should see the similar output
-
-![Screenshot 2024-10-12 at 20.26.33.png](../.gitbook/assets/Screenshot_2024-10-12_at_20.26.33.png)
 
 Restart your terminal and enter `dfx`.
 
@@ -102,8 +84,6 @@ Restart your terminal and enter `dfx`.
 ```
 
 You should see the following output that confirms `dfx` is installed on your machine.
-
-![Screenshot 2024-10-12 at 20.27.47.png](../.gitbook/assets/Screenshot_2024-10-12_at_20.27.47.png)
 
 ### Install DFX on `Windows`
 
@@ -126,8 +106,6 @@ To start your local node, enter the command below:
 dfx start --clean --background
 ```
 
-![Screenshot 2024-10-12 at 21.44.58.png](../.gitbook/assets/Screenshot_2024-10-12_at_21.44.58.png)
-
 This will run an local node instance that we can deploy our canister to using `dfx`.
 
 ### Hello World Canister using Motoko and Rust
@@ -144,31 +122,19 @@ The setup process will guide you through a series of prompts, where you'll make 
 
 Next, select `Motoko` or `Rust` as your development language of choice
 
-![Screenshot 2024-10-12 at 22.08.08.png](../.gitbook/assets/Screenshot_2024-10-12_at_22.08.08.png)
-
 Select `None` for the frontend framework:
-
-![Screenshot 2024-10-12 at 22.08.55.png](../.gitbook/assets/Screenshot_2024-10-12_at_22.08.55.png)
 
 Next, select `Internet Identity` as the extra feature
 
-![Screenshot 2024-10-12 at 22.18.10.png](../.gitbook/assets/Screenshot_2024-10-12_at_22.18.10.png)
-
 Your dfx project has just been created!
 
-![Screenshot 2024-10-12 at 22.23.01.png](../.gitbook/assets/Screenshot_2024-10-12_at_22.23.01.png)
-
 Change directory to the newly created **HelloWorld** directory (`cd HelloWorld`) and open it up in VSCode or your code editor of choice.
-
-![Screenshot 2024-10-12 at 22.24.43.png](../.gitbook/assets/Screenshot_2024-10-12_at_22.24.43.png)
 
 Run the following command in terminal where your project folder is: `path/HelloWorld`. This will deploy your canister to your local node!
 
 ```bash
 dfx deploy 
 ```
-
-![Screenshot 2024-10-12 at 22.39.29.png](../.gitbook/assets/Screenshot_2024-10-12_at_22.39.29.png)
 
 To know what each of the files in the folder correspond to, make sure to read [Exploring the default project structure](https://internetcomputer.org/docs/current/tutorials/developer-journey/level-0/intro-dfx#exploring-the-default-project-structure).
 
@@ -195,17 +161,11 @@ We’ll explore three ways in which we can call the `greet` function and pass a 
 
 To access the backend `Candid UI`, head over to the link that is printed in the terminal upon the successful deployment of the project titled Backend canister via `Candid Interface`.
 
-![Screenshot 2024-10-12 at 22.39.29.png](../.gitbook/assets/Screenshot_2024-10-12_at_22.39.29.png)
-
 It should take you to the Candid UI, a locally hosted frontend that can be used to easily interact with your canister functions and see the output log and the call time response.
-
-![Screenshot 2024-10-15 at 09.51.10.png](../.gitbook/assets/Screenshot_2024-10-15_at_09.51.10.png)
 
 ### Candid UI For `Github Codespaces` / `Gitpod`
 
 In `Github Codespaces` or `Gitpod`, to access the Candid UI, head over to the `port` section
-
-![Screenshot 2024-10-16 at 19.36.33.png](../.gitbook/assets/Screenshot_2024-10-16_at_19.36.33.png)
 
 Typically, canisters will be hosted on the 4943 port. To access it, first make the visibility public by right clicking the `port` and **change its visibility**. Then, simply replace the **local host address** with the **Forwarded Address**.
 
@@ -234,8 +194,6 @@ dfx canister call bkyz2-fmaaa-aaaaa-qaaaq-cai greet
 ```
 
 This will return the personalized greeting from the canister.
-
-![Screenshot 2024-10-16 at 18.58.40.png](../.gitbook/assets/Screenshot_2024-10-16_at_18.58.40.png)
 
 If there are parameters, `dfx` will automatically ask for it in a step-by-step sequence as show in the image above.
 
@@ -272,5 +230,3 @@ greet("Your Name");
 This script initializes an agent, connects to your canister using the `Actor`, and calls the `greet` function.
 
 Run the script and you should get the following output:
-
-![Screenshot 2024-10-16 at 19.52.25.png](../.gitbook/assets/Screenshot_2024-10-16_at_19.52.25.png)

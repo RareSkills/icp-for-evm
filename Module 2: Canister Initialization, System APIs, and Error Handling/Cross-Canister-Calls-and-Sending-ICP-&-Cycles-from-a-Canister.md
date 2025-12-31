@@ -1,7 +1,5 @@
 # Cross-Canister Calls and Sending ICP & Cycles from a Canister
 
-![Cross\_canister.jpg](../.gitbook/assets/Cross_canister.jpg)
-
 In this article, you’ll learn how Canisters can invoke another canister’s function as well as transfer `ICP` and `Cycles`.
 
 ### Outline
@@ -116,8 +114,6 @@ actor Caller {
 ```
 
 Head over to the `Candid UI` of the `Caller canister` to test it, it should return the expected value of **22**!
-
-![Screenshot 2024-10-15 at 17.23.36.png](../.gitbook/assets/Screenshot_2024-10-15_at_17.23.36.png)
 
 ### Passing arguments to the cross-canister call
 

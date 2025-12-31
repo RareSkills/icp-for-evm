@@ -1,7 +1,5 @@
 # How Interfacing with ICP Works
 
-![How Ineteracting with ICP works.jpg](../.gitbook/assets/How_Ineteracting_with_ICP_works.jpg)
-
 In Ethereum, developers use RPC providers like Infura or full nodes to handle transaction broadcasting and interaction with the network. On the Internet Computer (ICP), **Boundary Nodes** serve a similar function; they act as intermediaries that facilitate communication between external users and the ICP network.
 
 ## Boundary Nodes: The Access Point to ICP
@@ -39,8 +37,6 @@ In the new boundary-node architecture, **API Boundary Nodes** are placed under t
 Their core service, the `ic-boundary` API, forwards requests directly to the appropriate canister, bypassing the HTTP Gateway's translation layer. As no translation is required, `query calls`, `update calls`, and `read_state` calls are faster.
 
 As previously mentioned, HTTP Gateways translate HTTP requests and translates them to API canister calls, which are then sent to the API Boundary Nodes. The image below depicts the overall architecture of the IC Boundary Nodes.
-
-![image.png](../.gitbook/assets/image.png)
 
 In the future, `ic-boundary` is in works to perform caching. To perform API Canister Calls learn [here](https://internetcomputer.org/docs/current/references/ic-interface-spec/#http-interface).
 
