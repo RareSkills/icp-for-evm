@@ -18,9 +18,9 @@
 3. [Cross-Canister Calls and Sending ICP & Cycles from a Canister](/milestone_2/Cross-Canister-Calls-and-Sending-ICP-&-Cycles-from-a-Canister.md)
 
 ### Milestone 3
-1. Project: Create a Prototype Bank Canister on ICP
+1. [Project: Create a Prototype Bank Canister on ICP](./milestone_3/Simple-Bank-Canister.md)
 
-2. Asynchronouse Execution in ICP
+2. [Asynchronouse Execution in ICP](./milestone_3/Asynchronous-Execution-on-ICP.md)
 
-3. Introduction to Canister Programming with Motoko and Rust
+3. [Introduction to Canister Programming with Motoko and Rust](./milestone_3/Introduction-to-canister-programming-with-motoko-or-rust.md)
 
