@@ -126,6 +126,8 @@ We would like to thank Ujjwal, [Faybian Byrd](https://www.linkedin.com/in/faybia
 [Chapter 20 Transfer Cycles Between Canisters.md](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 20 Transfer Cycles Between Canisters.md>)
 {% endcontent-ref %}
 
+#### Module 5: Coming Soon
+
 ### Proposing changes
 
 If you want to suggest an edit or improvement, please open an **Issue** or submit a **Pull Request** on the GitHub repo: [https://github.com/RareSkills/icp-for-evm](https://github.com/RareSkills/icp-for-evm).

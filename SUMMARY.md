@@ -25,4 +25,4 @@
   * [Asynchronous Execution And It’s Effect On State-Changes](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 18 Asynchronous Execution And It’s Effect On State-Changes.md>)
   * [Canisters are Non-Blocking](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 19 Canisters are Non-Blocking.md>)
   * [Transfer Cycles Between Canisters](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 20 Transfer Cycles Between Canisters.md>)
-* [Module 5: Asynchronous Code Pattern and HTTP OutCalls](<Module 5: Asynchronous Code Pattern and HTTP OutCalls/README.md>)
+* [Module 5: Coming Soon](<Module 5: Asynchronous Code Pattern and HTTP OutCalls/README.md>)
