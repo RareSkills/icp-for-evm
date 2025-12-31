@@ -64,7 +64,7 @@ We would like to thank Ujjwal, [Faybian Byrd](https://www.linkedin.com/in/faybia
 [Chapter 6 Composite Types.md](<Module 1: Programming a Rust Canister/Chapter 6 Composite Types.md>)
 {% endcontent-ref %}
 
-#### Canister Initialization, System APIs, and Error Handling
+#### Module 2: Canister Initialization, System APIs, and Error Handling
 
 {% content-ref url="Module 2: Canister Initialization, System APIs, and Error Handling/Chapter 7 Initialize Canister State and Canister Upgrades.md" %}
 [Chapter 7 Initialize Canister State and Canister Upgrades.md](<Module 2: Canister Initialization, System APIs, and Error Handling/Chapter 7 Initialize Canister State and Canister Upgrades.md>)
@@ -82,7 +82,7 @@ We would like to thank Ujjwal, [Faybian Byrd](https://www.linkedin.com/in/faybia
 [Chapter 10 Simple Token Canister Project.md](<Module 2: Canister Initialization, System APIs, and Error Handling/Chapter 10 Simple Token Canister Project.md>)
 {% endcontent-ref %}
 
-#### ICP Token, System Canisters and The Reverse Gas Model
+#### Module 3: ICP Token, System Canisters and The Reverse Gas Model
 
 {% content-ref url="Module 3: ICP Token, System Canisters and The Reverse Gas Model/Chapter 11 Interact with Canisters Using The ICP JavaScript Agent.md" %}
 [Chapter 11 Interact with Canisters Using The ICP JavaScript Agent.md](<Module 3: ICP Token, System Canisters and The Reverse Gas Model/Chapter 11 Interact with Canisters Using The ICP JavaScript Agent.md>)
@@ -100,7 +100,7 @@ We would like to thank Ujjwal, [Faybian Byrd](https://www.linkedin.com/in/faybia
 [Chapter 14 Canisters Pay for Storage.md](<Module 3: ICP Token, System Canisters and The Reverse Gas Model/Chapter 14 Canisters Pay for Storage.md>)
 {% endcontent-ref %}
 
-#### Inter-Canister Communication and Asynchronous Execution
+#### Module 4: Inter-Canister Communication and Asynchronous Execution
 
 {% content-ref url="Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 15 Inter-Canister Calls.md" %}
 [Chapter 15 Inter-Canister Calls.md](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 15 Inter-Canister Calls.md>)
