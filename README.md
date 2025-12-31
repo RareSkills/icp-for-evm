@@ -1,6 +1,6 @@
 # ICP for EVM Developers
 
-This course helps engineers with an Ethereum background quickly grasp smart contract development on the Internet Computer Protocol (ICP). Our goal is to streamline your journey towards learning how to program ICP smart contracts and utilize ICP’s **Chain Fusion Technology**.
+This course helps engineers with an Ethereum background quickly grasp smart contract development on the Internet Computer Protocol (ICP). Our goal is to streamline your journey towards learning how to program ICP smart contracts and utilize ICP’s [**Chain Fusion Technology**](https://learn.internetcomputer.org/hc/en-us/articles/34329023770260-Chain-Fusion).
 
 ### Chain Fusion Technology
 
