@@ -21,13 +21,32 @@ This course focuses on practical learning and efficiency. Where possible, we’l
 
 #### Projects You’ll Build
 
-* DeFi vaults
-* Co-processors for Ethereum (Outsource heavy computations to canisters)
+* Fungible tokens
 * Web3 oracles
+* Co-processors for Ethereum (Outsource heavy computations to canisters)
 * Cross-chain messaging protocols
 
 Towards the end of this course, you’ll build a cross-chain bridge canister that facilitates message passing and token bridging between EVM chains (EVM ↔ EVM), as well as between EVM and Solana (EVM ↔ Solana).
 
-#### Rust Prerequisites
+### Rust Prerequisites
 
 This course assumes you already know Rust, including ownership, borrowing, and basic datatypes as these topics have been extensively covered by outside resources.
+
+### Acknowledgement
+
+We would like to thank ujjwal, [Faybian Byrd](https://www.linkedin.com/in/faybianbyrd/), serah and Moritz for their careful reviews. This work was supported by a grant from the Dfinity foundation.
+
+### Course Outline
+
+#### Module 1: Programming a Rust Canister
+
+[Chapter 1 Hello World and Developer Environment Installation.md](<Module 1: Programming a Rust Canister/Chapter 1 Hello World and Developer Environment Installation.md> "mention")
+
+
+
+### Additional Resources
+
+* **Community Forum**: [ICP Developer Forum](https://forum.dfinity.org/)
+* **Discord**: [Developer Discord](https://discord.internetcomputer.org/)
+* **YouTube Tutorials**: [DFINITY YouTube Channel](https://www.youtube.com/c/DFINITY)
+* **Developer Grants**: [ICP Community Developer Grants](https://dfinity.org/grants)
