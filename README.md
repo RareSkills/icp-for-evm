@@ -42,7 +42,13 @@ We would like to thank ujjwal, [Faybian Byrd](https://www.linkedin.com/in/faybia
 
 [Chapter 1 Hello World and Developer Environment Installation.md](<Module 1: Programming a Rust Canister/Chapter 1 Hello World and Developer Environment Installation.md> "mention")
 
+[Chapter 2  Function Visibility and Mutability.md](<Module 1: Programming a Rust Canister/Chapter 2  Function Visibility and Mutability.md> "mention")
 
+[Chapter 3 State Storage Variables.md](<Module 1: Programming a Rust Canister/Chapter 3 State Storage Variables.md> "mention")
+
+{% content-ref url="Module 1: Programming a Rust Canister/Chapter 4 The Update Function #[ic_cdk update].md" %}
+[Chapter 4 The Update Function #\[ic\_cdk update\].md](<Module 1: Programming a Rust Canister/Chapter 4 The Update Function #\[ic_cdk update].md>)
+{% endcontent-ref %}
 
 ### Additional Resources
 
