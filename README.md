@@ -6,6 +6,8 @@ This course helps engineers with an Ethereum background quickly grasp smart cont
 
 ICP smart contracts have the ability to create and send transactions to EVM-compatible blockchains _(e.g. Ethereum, Optimism, and Base)_, as well as non-EVM chains like Solana or Bitcoin. This feature of the ICP blockchain is called **Chain Fusion Technology.**
 
+<figure><img src=".gitbook/assets/chain fusion technology.jpg" alt=""><figcaption></figcaption></figure>
+
 Chain Fusion Technology is made possible by two key features of the Internet Computer Protocol: **HTTP Outcalls** and **Threshold Signatures**. Briefly,
 
 * **HTTP Outcalls** allow ICP smart contracts to perform native HTTP requests to external APIs.
