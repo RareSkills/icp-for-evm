@@ -40,88 +40,34 @@ We would like to thank Ujjwal, [Faybian Byrd](https://www.linkedin.com/in/faybia
 
 #### Module 1: Programming a Rust Canister
 
-{% content-ref url="Module 1: Programming a Rust Canister/Chapter 1 Hello World and Developer Environment Installation.md" %}
-[Chapter 1 Hello World and Developer Environment Installation.md](<Module 1: Programming a Rust Canister/Chapter 1 Hello World and Developer Environment Installation.md>)
-{% endcontent-ref %}
-
-{% content-ref url="Module 1: Programming a Rust Canister/Chapter 2  Function Visibility and Mutability.md" %}
-[Chapter 2  Function Visibility and Mutability.md](<Module 1: Programming a Rust Canister/Chapter 2  Function Visibility and Mutability.md>)
-{% endcontent-ref %}
-
-{% content-ref url="Module 1: Programming a Rust Canister/Chapter 3 State Storage Variables.md" %}
-[Chapter 3 State Storage Variables.md](<Module 1: Programming a Rust Canister/Chapter 3 State Storage Variables.md>)
-{% endcontent-ref %}
-
-{% content-ref url="Module 1: Programming a Rust Canister/Chapter 4 The Update Function #[ic_cdk update].md" %}
-[Chapter 4 The Update Function #\[ic\_cdk update\].md](<Module 1: Programming a Rust Canister/Chapter 4 The Update Function #\[ic_cdk update].md>)
-{% endcontent-ref %}
-
-{% content-ref url="Module 1: Programming a Rust Canister/Chapter 5 Safe Storage and Access With Thread-Local Storage.md" %}
-[Chapter 5 Safe Storage and Access With Thread-Local Storage.md](<Module 1: Programming a Rust Canister/Chapter 5 Safe Storage and Access With Thread-Local Storage.md>)
-{% endcontent-ref %}
-
-{% content-ref url="Module 1: Programming a Rust Canister/Chapter 6 Composite Types.md" %}
-[Chapter 6 Composite Types.md](<Module 1: Programming a Rust Canister/Chapter 6 Composite Types.md>)
-{% endcontent-ref %}
+* [Hello World and Developer Environment Installation](<Module 1: Programming a Rust Canister/Chapter 1 Hello World and Developer Environment Installation.md>)
+* [Function Visibility and Mutability](<Module 1: Programming a Rust Canister/Chapter 2  Function Visibility and Mutability.md>)
+* [State/Storage Variables](<Module 1: Programming a Rust Canister/Chapter 3 State Storage Variables.md>)
+* [The Update Function: #\[ic\_cdk::update\]](<Module 1: Programming a Rust Canister/Chapter 4 The Update Function #\[ic_cdk update].md>)
+* [Safe Storage and Access With Thread-Local Storage and RefCells](<Module 1: Programming a Rust Canister/Chapter 5 Safe Storage and Access With Thread-Local Storage.md>)
+* [Composite Types](<Module 1: Programming a Rust Canister/Chapter 6 Composite Types.md>)
 
 #### Module 2: Canister Initialization, System APIs, and Error Handling
 
-{% content-ref url="Module 2: Canister Initialization, System APIs, and Error Handling/Chapter 7 Initialize Canister State and Canister Upgrades.md" %}
-[Chapter 7 Initialize Canister State and Canister Upgrades.md](<Module 2: Canister Initialization, System APIs, and Error Handling/Chapter 7 Initialize Canister State and Canister Upgrades.md>)
-{% endcontent-ref %}
-
-{% content-ref url="Module 2: Canister Initialization, System APIs, and Error Handling/Chapter 8 System-Level Information In ICP.md" %}
-[Chapter 8 System-Level Information In ICP.md](<Module 2: Canister Initialization, System APIs, and Error Handling/Chapter 8 System-Level Information In ICP.md>)
-{% endcontent-ref %}
-
-{% content-ref url="Module 2: Canister Initialization, System APIs, and Error Handling/Chapter 9 Traps and Error Handling.md" %}
-[Chapter 9 Traps and Error Handling.md](<Module 2: Canister Initialization, System APIs, and Error Handling/Chapter 9 Traps and Error Handling.md>)
-{% endcontent-ref %}
-
-{% content-ref url="Module 2: Canister Initialization, System APIs, and Error Handling/Chapter 10 Simple Token Canister Project.md" %}
-[Chapter 10 Simple Token Canister Project.md](<Module 2: Canister Initialization, System APIs, and Error Handling/Chapter 10 Simple Token Canister Project.md>)
-{% endcontent-ref %}
+* [Initialize Canister State and Canister Upgrades](<Module 2: Canister Initialization, System APIs, and Error Handling/Chapter 7 Initialize Canister State and Canister Upgrades.md>)
+* [System-Level Information in ICP](<Module 2: Canister Initialization, System APIs, and Error Handling/Chapter 8 System-Level Information In ICP.md>)
+* [Traps and Error Handling](<Module 2: Canister Initialization, System APIs, and Error Handling/Chapter 9 Traps and Error Handling.md>)
+* [Simple Token Canister Project](<Module 2: Canister Initialization, System APIs, and Error Handling/Chapter 10 Simple Token Canister Project.md>)
 
 #### Module 3: ICP Token, System Canisters and The Reverse Gas Model
 
-{% content-ref url="Module 3: ICP Token, System Canisters and The Reverse Gas Model/Chapter 11 Interact with Canisters Using The ICP JavaScript Agent.md" %}
-[Chapter 11 Interact with Canisters Using The ICP JavaScript Agent.md](<Module 3: ICP Token, System Canisters and The Reverse Gas Model/Chapter 11 Interact with Canisters Using The ICP JavaScript Agent.md>)
-{% endcontent-ref %}
-
-{% content-ref url="Module 3: ICP Token, System Canisters and The Reverse Gas Model/Chapter 12 System Canisters (NNS) and The ICP Token.md" %}
-[Chapter 12 System Canisters (NNS) and The ICP Token.md](<Module 3: ICP Token, System Canisters and The Reverse Gas Model/Chapter 12 System Canisters (NNS) and The ICP Token.md>)
-{% endcontent-ref %}
-
-{% content-ref url="Module 3: ICP Token, System Canisters and The Reverse Gas Model/Chapter 13 The Reverse Gas Model of ICP.md" %}
-[Chapter 13 The Reverse Gas Model of ICP.md](<Module 3: ICP Token, System Canisters and The Reverse Gas Model/Chapter 13 The Reverse Gas Model of ICP.md>)
-{% endcontent-ref %}
-
-{% content-ref url="Module 3: ICP Token, System Canisters and The Reverse Gas Model/Chapter 14 Canisters Pay for Storage.md" %}
-[Chapter 14 Canisters Pay for Storage.md](<Module 3: ICP Token, System Canisters and The Reverse Gas Model/Chapter 14 Canisters Pay for Storage.md>)
-{% endcontent-ref %}
+* [Interact with Canisters Using The ICP JavaScript Agent Library](<Module 3: ICP Token, System Canisters and The Reverse Gas Model/Chapter 11 Interact with Canisters Using The ICP JavaScript Agent.md>)
+* [System Canisters (NNS) and The ICP Token](<Module 3: ICP Token, System Canisters and The Reverse Gas Model/Chapter 12 System Canisters (NNS) and The ICP Token.md>)
+* [The Reverse Gas Model of ICP](<Module 3: ICP Token, System Canisters and The Reverse Gas Model/Chapter 13 The Reverse Gas Model of ICP.md>)
+* [Canisters Pay for Storage](<Module 3: ICP Token, System Canisters and The Reverse Gas Model/Chapter 14 Canisters Pay for Storage.md>)
 
 #### Module 4: Inter-Canister Communication and Asynchronous Execution
 
-{% content-ref url="Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 15 Inter-Canister Calls.md" %}
-[Chapter 15 Inter-Canister Calls.md](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 15 Inter-Canister Calls.md>)
-{% endcontent-ref %}
-
-{% content-ref url="Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 16 Decoding and Encoding Inter-Canister Arguments.md" %}
-[Chapter 16 Decoding and Encoding Inter-Canister Arguments.md](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 16 Decoding and Encoding Inter-Canister Arguments.md>)
-{% endcontent-ref %}
-
-{% content-ref url="Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 17 unbounded_wait() vs bounded_wait().md" %}
-[Chapter 17 unbounded\_wait() vs bounded\_wait().md](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 17 unbounded_wait() vs bounded_wait().md>)
-{% endcontent-ref %}
-
-{% content-ref url="Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 18 Asynchronous Execution And It’s Effect On State-Changes.md" %}
-[Chapter 18 Asynchronous Execution And It’s Effect On State-Changes.md](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 18 Asynchronous Execution And It’s Effect On State-Changes.md>)
-{% endcontent-ref %}
-
-{% content-ref url="Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 19 Canisters are Non-Blocking.md" %}
-[Chapter 19 Canisters are Non-Blocking.md](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 19 Canisters are Non-Blocking.md>)
-{% endcontent-ref %}
-
+* [Inter-Canister Calls](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 15 Inter-Canister Calls.md>)
+* [Decoding and Encoding Inter-Canister Arguments](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 16 Decoding and Encoding Inter-Canister Arguments.md>)
+* [unbounded\_wait() vs bounded\_wait()](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 17 unbounded_wait() vs bounded_wait().md>)
+* [Asynchronous Execution and It's Effect on State-Changes](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 18 Asynchronous Execution And It’s Effect On State-Changes.md>)
+* [Canisters are Non-Blocking](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 19 Canisters are Non-Blocking.md>)
 * [Transfer Cycles Between Canisters](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 20 Transfer Cycles Between Canisters.md>)
 
 #### Module 5: Coming Soon
