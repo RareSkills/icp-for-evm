@@ -122,7 +122,7 @@ We would like to thank Ujjwal, [Faybian Byrd](https://www.linkedin.com/in/faybia
 [Chapter 19 Canisters are Non-Blocking.md](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 19 Canisters are Non-Blocking.md>)
 {% endcontent-ref %}
 
-#### [Chapter 20 Transfer Cycles Between Canisters.md](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 20 Transfer Cycles Between Canisters.md> "mention")
+* [Transfer Cycles Between Canisters](<Module 4: Inter-Canister Communication and Asynchronous Execution /Chapter 20 Transfer Cycles Between Canisters.md>)
 
 #### Module 5: Coming Soon
 
