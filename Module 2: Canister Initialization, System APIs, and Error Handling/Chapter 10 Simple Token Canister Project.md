@@ -1,13 +1,13 @@
 # Simple Token Canister Project
 
-In the previous lessons, we explored individual building blocks of Rust canister development—state management, query and update methods, access control, and caller-based authorization. While each concept works in isolation, real-world canisters require these pieces to work together in a coherent design. In this tutorial, we bring those ideas together by building a **simple fungible token canister** from scratch. 
+In the previous lessons, we explored individual building blocks of Rust canister development—state management, query and update methods, access control, and caller-based authorization. While each concept works in isolation, real-world canisters require these pieces to work together in a coherent design. In this tutorial, we bring those ideas together by building a **simple fungible token canister** from scratch.
 
 If you’re familiar with Ethereum, you can think of this canister as the ICP analogue of an **ERC-20 token**. However, while the high-level concepts—balances, transfers, approvals, and delegated spending—remain familiar, their implementation on ICP differs in important ways.
 
 On the Internet Computer, token interfaces are standardized through the **ICRC (Internet Computer Request for Comments)** specifications. In particular:
 
-- **ICRC-1** defines the core fungible token functionality, such as balances and transfers.
-- **ICRC-2** extends this model with the approval and transfer_from pattern for delegated transfers.
+* **ICRC-1** defines the core fungible token functionality, such as balances and transfers.
+* **ICRC-2** extends this model with the approval and transfer\_from pattern for delegated transfers.
 
 Throughout this tutorial, we will implement the essential functionality covered by these two standards, using Rust and the IC canister programming model.
 
@@ -15,21 +15,21 @@ Specifically, our token canister will support:
 
 **Token metadata**
 
-- `name()`
-- `symbol()`
+* `name()`
+* `symbol()`
 
 **Core token logic**
 
-- `mint()`
-- `totalSupply()`
-- `balanceOf()`
-- `transfer()`
+* `mint()`
+* `totalSupply()`
+* `balanceOf()`
+* `transfer()`
 
 **Allowance and delegation**
 
-- `allowance()`
-- `approve()`
-- `transferFrom()`
+* `allowance()`
+* `approve()`
+* `transferFrom()`
 
 To kick-start things, create a new dfx project called `token_canister` by running the following command in your terminal:
 
@@ -37,15 +37,13 @@ To kick-start things, create a new dfx project called `token_canister` by runnin
 dfx new token_canister --type rust --no-frontend
 ```
 
-Open the project, clear the contents of `lib.rs`.
+Open the project, clear the contents of `lib.rs`.
 
 ## **Writing the Token Metadata**
 
 Token metadata refers to the basic, human-readable information that identifies a token. Metadata defines what the token is from a user’s perspective. Wallets, dashboards, and explorers rely on this information to display tokens in a meaningful way.
 
-At a minimum, token metadata includes:
-• the token’s **name**, and
-• the token’s **symbol**.
+At a minimum, token metadata includes: • the token’s **name**, and • the token’s **symbol**.
 
 These values do not affect the token’s accounting logic, but they are essential for usability and recognition.
 
@@ -64,7 +62,7 @@ thread_local!{
 ic_cdk::export_candid!();
 ```
 
-To make these variables queryable, add a query function for both the `NAME` and `SYMBOL`: `name()` and `symbol()` respectively. 
+To make these variables queryable, add a query function for both the `NAME` and `SYMBOL`: `name()` and `symbol()` respectively.
 
 ```rust
 use std::cell::RefCell;
@@ -88,7 +86,7 @@ fn symbol() -> String {
 ic_cdk::export_candid!();
 ```
 
-Both `NAME` and `SYMBOL`'s value will be initialized when the canister is first deployed. To handle this, define an `init()` function and mark it with the `#[ic_cdk::init]` attribute; this function will initialize `NAME`, `SYMBOL`, and any other state variables that are needed.
+Both `NAME` and `SYMBOL`'s value will be initialized when the canister is first deployed. To handle this, define an `init()` function and mark it with the `#[ic_cdk::init]` attribute; this function will initialize `NAME`, `SYMBOL`, and any other state variables that are needed.
 
 ```rust
 use std::cell::RefCell;
@@ -120,8 +118,7 @@ ic_cdk::export_candid!();
 
 ## **Building the Core Token Logic**
 
-With the token’s identity in place, we can now focus on implementing its core logic.
-The **core token logic** defines how tokens are created, how ownership is tracked, and how tokens move between principals. This includes balance accounting, total supply management, minting, and direct transfers.
+With the token’s identity in place, we can now focus on implementing its core logic. The **core token logic** defines how tokens are created, how ownership is tracked, and how tokens move between principals. This includes balance accounting, total supply management, minting, and direct transfers.
 
 In this section, we’ll build these pieces incrementally, starting with the accounting state that records who owns how many tokens, and then layering on the operations that modify that state.
 
@@ -213,7 +210,7 @@ ic_cdk::export_candid!();
 
 ### `TOTAL_SUPPLY` Tracks The Tokens in Circulation
 
-The `TOTAL_SUPPLY` variable will keep track of the cumulative tokens minted. The minting and transfer function will be introduced in following section. 
+The `TOTAL_SUPPLY` variable will keep track of the cumulative tokens minted. The minting and transfer function will be introduced in following section.
 
 Add the `TOTAL_SUPPLY` variable into your thread local storage.
 
@@ -303,9 +300,9 @@ With the balance and total supply logic in place, we are now ready to mint token
 
 For this token implementation, we restrict minting to the contract owner, which is set to the deployer.
 
-To implement this logic, we need to define an `OWNER` state variable, initialize it during canister deployment, and use it to enforce access control inside the mint function.
+To implement this logic, we need to define an `OWNER` state variable, initialize it during canister deployment, and use it to enforce access control inside the mint function.
 
-### Defining the `OWNER`  Variable
+### Defining the `OWNER` Variable
 
 Add an `OWNER` variable and have its value initialize through the constructor.
 
@@ -357,7 +354,7 @@ fn total_supply() -> u128 {
 ic_cdk::export_candid!();
 ```
 
-Add an `owner()` query function that returns the owner’s `Principal`: 
+Add an `owner()` query function that returns the owner’s `Principal`:
 
 ```rust
 use std::{cell::RefCell, collections::HashMap};
@@ -410,14 +407,14 @@ ic_cdk::export_candid!();
 
 ### Only owner can `mint()` Function
 
-The `mint()` function creates new tokens into circulation and assigns them to a specified account. To prevent unauthorized minting, we’ll add access control so that only the contract owner can call this function.
+The `mint()` function creates new tokens into circulation and assigns them to a specified account. To prevent unauthorized minting, we’ll add access control so that only the contract owner can call this function.
 
-When `mint()` is executed, it 
+When `mint()` is executed, it
 
-1. Increases the recipient’s balance and 
+1. Increases the recipient’s balance and
 2. updates the total supply to account for the newly created tokens.
 
-`mint()` returns a `Result`. Prior to our usage of boolean to return values, we’ll use the `Result` type to add a variation of return values.  
+`mint()` returns a `Result`. Prior to our usage of boolean to return values, we’ll use the `Result` type to add a variation of return values.
 
 Add the `mint()` function below into `lib.rs`, detailed code explanations are provided after.
 
@@ -446,10 +443,10 @@ fn mint(to: Principal, amount: u128) -> Result<String, String> {
 ic_cdk::export_candid!();
 ```
 
-The `mint()` function accepts two arguments: the recipient’s principal and the amount to mint. Its logic is as follows:
+The `mint()` function accepts two arguments: the recipient’s principal and the amount to mint. Its logic is as follows:
 
-1. **Authorization check:** it verifies that whether `msg_caller()` is the contract owner or not and returns an Err immediately if the caller is not an owner.
-2. **State updates:** If `msg_caller()` is the owner, the function credits the recipient’s balance by the minted amount—creating a new balance entry if one does not already exist—and increments the total token supply accordingly.
+1. **Authorization check:** it verifies that whether `msg_caller()` is the contract owner or not and returns an Err immediately if the caller is not an owner.
+2. **State updates:** If `msg_caller()` is the owner, the function credits the recipient’s balance by the minted amount—creating a new balance entry if one does not already exist—and increments the total token supply accordingly.
 
 ## Adding The `transfer()` Functionality
 
@@ -496,7 +493,7 @@ ic_cdk::export_candid!();
 
 ICRC-1 defines the core token functionality, including balance tracking and direct transfers between principals. However, direct transfers only allow a token owner to move their own tokens.
 
-To support delegated transfers—where one principal is allowed to transfer tokens on behalf of another—ICRC-2 extends this model with the approve and transfer_from pattern. This mechanism is commonly used by applications such as exchanges and payment processors.
+To support delegated transfers—where one principal is allowed to transfer tokens on behalf of another—ICRC-2 extends this model with the approve and transfer\_from pattern. This mechanism is commonly used by applications such as exchanges and payment processors.
 
 ### **Allowance and Delegated Transfers**
 
@@ -578,10 +575,11 @@ fn allowance(owner: Principal, spender: Principal) -> u128 {
 ```
 
 **How the allowance() function works:**
+
 1. The function checks whether the owner has an entry in the `ALLOWANCE` mapping. If no entry exists, the owner has never approved the spender, and the function immediately returns 0.
 2. If an entry exists for the owner, the function looks up the spender’s allowance and returns the approved amount, defaulting to 0 if no specific entry is found.
 
-Reading the allowance tells us *how much* a spender is authorized to use, but it does not actually move any tokens. To complete the delegation workflow, we need a way for an approved spender to act on that authorization and transfer tokens on the owner’s behalf.
+Reading the allowance tells us _how much_ a spender is authorized to use, but it does not actually move any tokens. To complete the delegation workflow, we need a way for an approved spender to act on that authorization and transfer tokens on the owner’s behalf.
 
 ### **Transferring Delegated Tokens: `transfer_from()`**
 
@@ -660,7 +658,7 @@ fn transfer_from(from: Principal, to: Principal, amount: u128) -> bool {
 
 ## **Deploying the Token Canister**
 
-First, deploy the token_canister using the default dfx identity. Since the canister owner is set to the deployer, this identity will act as the **token owner** for our tests. 
+First, deploy the token\_canister using the default dfx identity. Since the canister owner is set to the deployer, this identity will act as the **token owner** for our tests.
 
 ```rust
 dfx deploy
@@ -668,7 +666,7 @@ dfx deploy
 
 When prompted, pass "RareSkills" as the token name and "RS" as the symbol.
 
-![Screenshot 2025-08-20 at 20.38.14.png](Simple%20Token%20Canister%20Project/Screenshot_2025-08-20_at_20.38.14.png)
+![Screenshot 2025-08-20 at 20.38.14.png](<../.gitbook/assets/Screenshot_2025-08-20_at_20.38.14 (1).png>)
 
 We haven’t minted any tokens yet, to make it interesting let’s mint tokens to a new Principal, `Alice`.
 
@@ -710,7 +708,7 @@ We can create as many identities as needed. The default Identity should have the
 dfx identity list
 ```
 
-![Screenshot 2025-08-20 at 21.15.45.png](Simple%20Token%20Canister%20Project/Screenshot_2025-08-20_at_21.15.45.png)
+![Screenshot 2025-08-20 at 21.15.45.png](<../.gitbook/assets/Screenshot_2025-08-20_at_21.15.45 (1).png>)
 
 To get the principal of any identity, use the command below:
 
@@ -728,15 +726,15 @@ Switch back to `default` identity and call the `mint()` function.
 dfx canister call token_canister_backend mint
 ```
 
-dfx would prompt you to pass the `to : Principal` and `amount : u128`. 
+dfx would prompt you to pass the `to : Principal` and `amount : u128`.
 
 We’ll mint 1000 RareSkills Tokens to `Alice`, therefore pass `p67cs-wteuw-2m25n-457nx-dxwq7-uk36c-qlodh-nh5dw-uhzx4-ga6k3-yae` (use your Alice Identities principal, this is an example) and `1000`.
 
-![Screenshot 2025-08-20 at 21.32.43.png](Simple%20Token%20Canister%20Project/Screenshot_2025-08-20_at_21.32.43.png)
+![Screenshot 2025-08-20 at 21.32.43.png](<../.gitbook/assets/Screenshot_2025-08-20_at_21.32.43 (1).png>)
 
 Call the `balance_of()` function to verify `Alice`’s balance.
 
-![Screenshot 2025-08-20 at 21.33.57.png](Simple%20Token%20Canister%20Project/Screenshot_2025-08-20_at_21.33.57.png)
+![Screenshot 2025-08-20 at 21.33.57.png](<../.gitbook/assets/Screenshot_2025-08-20_at_21.33.57 (1).png>)
 
 ### Transfer RareSkills Tokens
 
@@ -746,17 +744,17 @@ Switch to Alice identity and transfer 250 tokens to this address : `hpikg-6exdt-
 dfx canister call token_canister_backend transfer
 ```
 
-![Screenshot 2025-08-20 at 21.38.34.png](Simple%20Token%20Canister%20Project/Screenshot_2025-08-20_at_21.38.34.png)
+![Screenshot 2025-08-20 at 21.38.34.png](<../.gitbook/assets/Screenshot_2025-08-20_at_21.38.34 (1).png>)
 
 Cross-check `Alice’s` balance and the random principal’s balance:
 
 Alice would have a remaining balance of 750.
 
-![Screenshot 2025-08-20 at 21.39.39.png](Simple%20Token%20Canister%20Project/Screenshot_2025-08-20_at_21.39.39.png)
+![Screenshot 2025-08-20 at 21.39.39.png](<../.gitbook/assets/Screenshot_2025-08-20_at_21.39.39 (1).png>)
 
 And `hpikg-6exdt-jn33w-ndty3-fc7jc-tl2lr-buih3-cs3y7-tftkp-sfp62-gqe` a new balance of 250.
 
-![Screenshot 2025-08-20 at 21.40.20.png](Simple%20Token%20Canister%20Project/Screenshot_2025-08-20_at_21.40.20.png)
+![Screenshot 2025-08-20 at 21.40.20.png](<../.gitbook/assets/Screenshot_2025-08-20_at_21.40.20 (1).png>)
 
 ### Approve Spender
 
@@ -772,20 +770,20 @@ dfx canister call token_canister_backend approve
 
 Then switch dfx identities to `default` and invoke the `transfer_from()` function pass:
 
-- `From` : Alice’s Principal
-- `To` : `hpikg-6exdt-jn33w-ndty3-fc7jc-tl2lr-buih3-cs3y7-tftkp-sfp62-gqe`
-- `Amount`: 750
+* `From` : Alice’s Principal
+* `To` : `hpikg-6exdt-jn33w-ndty3-fc7jc-tl2lr-buih3-cs3y7-tftkp-sfp62-gqe`
+* `Amount`: 750
 
-![Screenshot 2025-08-20 at 22.11.03.png](Simple%20Token%20Canister%20Project/Screenshot_2025-08-20_at_22.11.03.png)
+![Screenshot 2025-08-20 at 22.11.03.png](<../.gitbook/assets/Screenshot_2025-08-20_at_22.11.03 (1).png>)
 
 Check that the random identity’s balance is now `1000`
 
-![Screenshot 2025-08-20 at 22.10.33.png](Simple%20Token%20Canister%20Project/Screenshot_2025-08-20_at_22.10.33.png)
+![Screenshot 2025-08-20 at 22.10.33.png](<../.gitbook/assets/Screenshot_2025-08-20_at_22.10.33 (1).png>)
 
 And Alice’s is now `0`.
 
-![Screenshot 2025-08-20 at 22.12.00.png](Simple%20Token%20Canister%20Project/Screenshot_2025-08-20_at_22.12.00.png)
+![Screenshot 2025-08-20 at 22.12.00.png](<../.gitbook/assets/Screenshot_2025-08-20_at_22.12.00 (1).png>)
 
 ### ICP Javascript Agent
 
-We have learnt how to interface with `token_canister` using dfx, the next article teaches how to use ICP Javascript Agent, similar to Ethers.js, to interact with token_canister, and in extension other canisters.
+We have learnt how to interface with `token_canister` using dfx, the next article teaches how to use ICP Javascript Agent, similar to Ethers.js, to interact with token\_canister, and in extension other canisters.

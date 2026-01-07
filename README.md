@@ -45,7 +45,7 @@ We would like to thank Ujjwal, [Faybian Byrd](https://www.linkedin.com/in/faybia
 * [Hello World and Developer Environment Installation](<Module 1: Programming a Rust Canister/Chapter 1 Hello World and Developer Environment Installation.md>)
 * [Function Visibility and Mutability](<Module 1: Programming a Rust Canister/Chapter 2  Function Visibility and Mutability.md>)
 * [State/Storage Variables](<Module 1: Programming a Rust Canister/Chapter 3 State Storage Variables.md>)
-* [The Update Function: #\[ic\_cdk::update\]](<Module 1: Programming a Rust Canister/Chapter 4 The Update Function #\[ic_cdk update].md>)
+* [The Update Function: #\[ic\_cdk::update\]](/broken/pages/4U8U3oIkZydALKAQL0mt)
 * [Safe Storage and Access With Thread-Local Storage and RefCells](<Module 1: Programming a Rust Canister/Chapter 5 Safe Storage and Access With Thread-Local Storage.md>)
 * [Composite Types](<Module 1: Programming a Rust Canister/Chapter 6 Composite Types.md>)
 
