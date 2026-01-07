@@ -5,7 +5,7 @@
   * [Hello World and Developer Environment Installation](<Module 1: Programming a Rust Canister/Chapter 1 Hello World and Developer Environment Installation.md>)
   * [Function Visibility and Mutability](<Module 1: Programming a Rust Canister/Chapter 2  Function Visibility and Mutability.md>)
   * [State/Storage Variables](<Module 1: Programming a Rust Canister/Chapter 3 State Storage Variables.md>)
-  * [The Update Function: #\[ic\_cdk::update\]](module-1-programming-a-rust-canister/the-update-function-ic_cdk-update.md)
+  * [The Update Function](module-1-programming-a-rust-canister/the-update-function.md)
   * [Safe Storage and Access With Thread-Local Storage and RefCells](<Module 1: Programming a Rust Canister/Chapter 5 Safe Storage and Access With Thread-Local Storage.md>)
   * [Composite Types](<Module 1: Programming a Rust Canister/Chapter 6 Composite Types.md>)
 * [Module 2: Canister Initialization, System APIs, and Error Handling](module-2-canister-initialization-system-apis-and-error-handling/README.md)
