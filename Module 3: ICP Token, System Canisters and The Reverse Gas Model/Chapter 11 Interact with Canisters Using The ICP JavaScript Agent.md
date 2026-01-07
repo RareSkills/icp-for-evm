@@ -1,20 +1,17 @@
 # Interact with Canisters Using The ICP JavaScript Agent Library
 
-The _ICP JavaScript Agent_ library provides JavaScript abstractions to interact with the Internet Computer Protocol, including calling canister functions or querying on-chain information (like Ethers.js for Ethereum). Other agent libraries exist such as [Rust, Go, Dart, etc.](https://internetcomputer.org/docs/building-apps/interact-with-canisters/agents/overview)
+The [ICP JavaScript Agent](https://docs.internetcomputer.org/building-apps/interact-with-canisters/agents/javascript-agent)  is a JavaScript library that provides high-level abstractions for interacting with the Internet Computer Protocol (ICP). Using it, you can call canister functions, submit state-changing transactions, and query on-chain data—similar to how libraries like *ethers.js* are used to interact with Ethereum smart contracts. While ICP also offers agent libraries in other languages such as Rust, Go, and Dart, this guide focuses specifically on the JavaScript agent.
 
-This guide is a continuation of _Simple Token Canister_, with your `token_canister` already deployed, we’ll learn how to use ICP JavaScript Agent by interacting with `token_canister`.
+This tutorial builds on the previous **Simple Token Canister** guide. We assume that your token_canister is already deployed locally. In this guide, you’ll learn how to interact with that canister from a JavaScript environment using the ICP JavaScript Agent.
 
-### Outline:
+By the end of this tutorial, you will be able to:
 
-* Install ICP Javascript Agent
-* Connect To The Localnet
-* Prepare the Canister’s Candid Interface
-* Create a Canister Instance
-* Query Calls
-* Update Calls
-* Signed transactions with an Identity
+- Connect a JavaScript application to a local ICP replica
+- Generate and use a canister’s Candid interface in JavaScript
+- Perform both query and update calls
+- Sign transactions using a specific identity
 
-Create a new folder called `icp_javascript_agent` in your home directory and initialize a new npm project:
+To follow along with this tutorial, create a new folder called `icp_javascript_agent` in your home directory and initialize a new npm project by running the following commands:
 
 ```bash
 mkdir icp_javascript_agent
@@ -22,29 +19,39 @@ cd icp_javascript_agent
 npm init -y
 ```
 
-## Install ICP Javascript Agent
+## Installing the ICP Javascript Agent
 
-Install the ICP Javascript Agent package:
+To install the ICP JavaScript Agent package, run the following command:
 
 ```jsx
 npm i --save @dfinity/agent
 ```
 
-Open `package.json` and change the `“type" : “commonjs"` to `“type" : “module"`. Node will treat your `.js` files as ES modules and allow you to use the `import`/`export` syntax required by `@dfinity/agent`.
+Open `package.json` and change the `“type":“commonjs"` to `“type":“module"`. Node will treat your `.js` files as ES modules and allow you to use the `import`/`export` syntax required by `@dfinity/agent`.
 
-![Screenshot 2025-07-08 at 18.01.08.png](../.gitbook/assets/Screenshot_2025-07-08_at_18.01.08.png)
+![Screenshot 2025-07-08 at 18.01.08.png](Interact%20with%20Canisters%20Using%20The%20ICP%20JavaScript%20A/Screenshot_2025-07-08_at_18.01.08.png)
 
-Lastly, create a new javascript file called `agent.js`. We’ll write our script inside of `agent.js`.
+Next, create a new JavaScript file called `agent.js`.
 
-![Screenshot 2025-08-21 at 14.11.04.png](../.gitbook/assets/Screenshot_2025-08-21_at_14.11.04.png)
+![Screenshot 2025-08-21 at 14.11.04.png](Interact%20with%20Canisters%20Using%20The%20ICP%20JavaScript%20A/Screenshot_2025-08-21_at_14.11.04.png)
+
+This file will contain the script we’ll use to connect to the local ICP replica and interact with the `token_canister`.
 
 ## Connect To The Local IC Instance
 
-To start off, we’ll instantiate an **HTTP agent** that manages all communication between your JavaScript code and the local ICP replica.
+Now that our JavaScript project is set up, the next step is to establish a connection to the local Internet Computer replica. All communication between your JavaScript code and a canister—whether it’s a query or a state-changing update—goes through an **HTTP agent**.
+
+An HTTP agent is responsible for:
+
+- sending requests to the replica,
+- attaching identity information to those requests, and
+- receiving and decoding responses from canisters.
+
+Without an agent, your JavaScript code has no way to talk to the Internet Computer.
 
 ### Create an HTTP agent and Verify the connection
 
-Import the `HttpAgent` class and call its `.create()` method with the localnet URL `http://127.0.0.1:4943`.
+To create an agent, import the `HttpAgent` class from `@dfinity/agent` and initialize it with the URL of the local replica. When running dfx start, the local replica listens on [http://127.0.0.1:4943](http://127.0.0.1:4943/).
 
 ```rust
 import { HttpAgent } from '@dfinity/agent';
@@ -54,7 +61,7 @@ const agent = await HttpAgent.create({
 });
 ```
 
-Next, call `agent.status()` to check that the replica is running and reachable:
+At this point, the agent is configured but we haven’t yet confirmed that it can successfully reach the replica. To do that, we can call `agent.status()`, which queries the replica’s status endpoint.
 
 ```jsx
 import { HttpAgent } from '@dfinity/agent';
@@ -74,28 +81,30 @@ Run the script with:
 node agent.js
 ```
 
-If the connection succeeds, the output will include `replica_health_status: "healthy"`.
+If the connection succeeds, the output will include `replica_health_status: "healthy"`.
 
-![Screenshot 2025-08-21 at 14.40.24.png](../.gitbook/assets/Screenshot_2025-08-21_at_14.40.24.png)
+![Screenshot 2025-08-21 at 14.40.24.png](Interact%20with%20Canisters%20Using%20The%20ICP%20JavaScript%20A/Screenshot_2025-08-21_at_14.40.24.png)
 
-Now that we have an established connection with the localnet, we can interact with `token_canister` canister as long as we have its:
+This confirms that your JavaScript code can communicate with the local ICP replica.
 
-* &#x43;_&#x61;nister Id, and_
-* _Candid Interface_
+With a working agent in place, we can now interact with our deployed `token_canister`. To do that, we still need two pieces of information:
 
-The next section explains how to obtain `token_canister`’s Candid interface in javaScript format.
+- the **canister ID**, which identifies the specific canister on the network, and
+- the **Candid interface**, which describes the canister’s methods and their types.
+
+In the next section, we’ll generate the Candid interface for token_canister in JavaScript format and prepare it for use with the agent.
 
 ## Import `Token_Canister`'s Candid Interface
 
-This section describes how we can do obtain a canister’s _Candid Interface_ in javascript through dfx.
+With a working HTTP agent, our JavaScript code can now communicate with the local ICP replica. However, the agent alone is not enough. In order to call methods on a specific canister, the agent also needs to know **what functions the canister exposes and how to encode their arguments**.
 
-Head over to `*token_canister*` directory and run the command below. This will translate the canister’s Candid Interface into javascript, under the file: `token_canister_backend.did.js`
+This information is described by the canister’s **Candid interface**. When working in JavaScript, this interface must be available in a JavaScript-compatible form.
 
 ```rust
-dfx generate token_canister
+dfx generate token_canister_backend
 ```
 
-The translated candid interface file, `token_canister_backend.did.js`, can be found at:
+Head over to `*token_canister*` directory and run the command below. This will translate the canister’s Candid Interface into javascript, under the file:  `token_canister_backend.did.js`
 
 ```rust
 token_canister
@@ -107,9 +116,9 @@ token_canister
 
 Copy `token_canister_backend.did.js` over to **`icp_javascript_agent`** folder.
 
-![Screenshot 2025-08-21 at 14.30.00.png](../.gitbook/assets/Screenshot_2025-08-21_at_14.30.00.png)
+![Screenshot 2025-08-21 at 14.30.00.png](Interact%20with%20Canisters%20Using%20The%20ICP%20JavaScript%20A/Screenshot_2025-08-21_at_14.30.00.png)
 
-Then in the `agent.js` file, import `idlFactory` from `token_canister_backend.did.js` file.
+Next, open the `agent.js` file and import `idlFactory` from the generated Candid file:
 
 ```jsx
 import { HttpAgent } from '@dfinity/agent';
@@ -120,25 +129,34 @@ const agent = await HttpAgent.create({
 });
 ```
 
-`idlFactory` is an exported function of the candid interface.
+The `idlFactory` is a function generated from the Candid interface. It describes the canister’s methods and their types in a form that the ICP JavaScript Agent can use to encode requests and decode responses.
 
-Now that we’ve established a connection to the localnet and obtained the Candid interface for `token_canister`, we can start interacting with the canister.
+Now that we’ve established a connection to the localnet and obtained the Candid interface for `token_canister`, we can start interacting with the canister.
 
 ## Create a Canister Instance
 
-Import `Actor` from the `@dfinity/agent` library. The `Actor` object creates a callable instance of a canister.
+At this point, we have two essential pieces in place:
+
+- an HTTP agent connected to the local ICP replica, and
+- the JavaScript representation of the token_canister Candid interface.
+
+What we’re still missing is a convenient way to **call canister methods from JavaScript**. This is where the **Actor** abstraction comes in.
+
+An **Actor** represents a specific canister on the network and exposes its Candid-defined methods as callable JavaScript functions. Once an actor is created, interacting with a canister feels very similar to calling methods on a local object.
+
+To create an actor, import Actor from the `@dfinity/agent package`:
 
 ```rust
 import { Actor } from '@dfinity/agent';
 ```
 
-`Actor` accepts three parameters:
+An actor is created using three inputs:
 
 1. The candid interface, which we have imported as `idlFactory`
 2. The agent, which was created using `HttpAgent`.
 3. The canister ID of `token_canister`, which we can get e.g. `vu5yx-eh777-77774-qaaga-cai`
 
-Here’s the complete code example of an `Actor` canister instance object.
+Putting everything together, the following code creates an actor for `token_canister`:
 
 ```jsx
 import { HttpAgent } from '@dfinity/agent';
@@ -160,31 +178,33 @@ const token_actor = Actor.createActor(
   }
 );
 
-// query calls or update calls
+await agent.fetchRootKey(); 
 ```
 
-The subsequent section are examples of calling `token_canister` functions.
+Once created, `token_actor` exposes all public methods defined in the canister’s Candid interface. We can now use it to perform both **query** and **update** calls.
 
 ## Query Calls
 
-Now that we have the agent properly configured to interact with our canister, let’s start the interaction by retrieving the metadata information via query calls. Query calls in ICP are free, just like view calls in Solidity.
+Query calls allow us to **read canister state** without modifying it. These calls are fast and free, similar to view functions in Solidity.
 
-### **Retrieving token `name`**
+Let’s start by retrieving some metadata from the `token_canister`.
 
-The function below invokes the `name()` function of the `token_canister`:
+### **Retrieving token name**
+
+The following call invokes the `name()` query method:
 
 ```tsx
 // copy paste code found in ##Create Canister Instance
 
 const name = await token_actor.name();
-console.log(res);
+console.log(name);
 ```
 
-![Screenshot 2025-08-21 at 15.16.01.png](../.gitbook/assets/Screenshot_2025-08-21_at_15.16.01.png)
+![Screenshot 2025-08-21 at 15.16.01.png](Interact%20with%20Canisters%20Using%20The%20ICP%20JavaScript%20A/Screenshot_2025-08-21_at_15.16.01.png)
 
 ### **Retrieving the token `symbol`**
 
-`get_symbol()` returns a string representing the symbol of the token canister.
+`token_actor.symbol()` returns a string representing the symbol of the token canister.
 
 ```tsx
 
@@ -192,7 +212,7 @@ const symbol = await token_actor.symbol();
 console.log(symbol);
 ```
 
-![Screenshot 2025-08-21 at 15.16.36.png](../.gitbook/assets/Screenshot_2025-08-21_at_15.16.36.png)
+![Screenshot 2025-08-21 at 15.16.36.png](Interact%20with%20Canisters%20Using%20The%20ICP%20JavaScript%20A/Screenshot_2025-08-21_at_15.16.36.png)
 
 ### Retrieving the `token_supply`
 
@@ -203,9 +223,14 @@ console.log(total_supply);
 
 ## Update Calls
 
-Let’s start by invoking a state-changing function, `mint()`.
+So far, we’ve only made **query calls**, which read canister state without modifying it. Now we’ll move on to **update calls**, which change the canister’s state and therefore require authorization.
 
-Here’s the code which would interact with the `mint()` function, and supply its arguments, the receiver principal and the amount of tokens to mint.
+Let’s start by invoking the mint() function, which creates new tokens and assigns them to a recipient.
+
+The code below calls `mint()` with two arguments:
+
+- the recipient’s principal, and
+- the number of tokens to mint.
 
 ```tsx
 import { Principal } from '@dfinity/principal';
@@ -222,19 +247,19 @@ const mint_result = await mint_tokens(recipient, 5000);
 console.log('Mint result:', mint_result);
 ```
 
-Run the code with
+Run the code with:
 
 ```rust
 node agent.js
 ```
 
-You should expect a Failure return statement “only owner can call this function”:
+You should see a failure message indicating that **only the owner can call this function**. This failure is expected.
 
-![Screenshot 2025-08-21 at 15.39.03.png](../.gitbook/assets/Screenshot_2025-08-21_at_15.39.03.png)
+![Screenshot 2025-08-21 at 15.39.03.png](Interact%20with%20Canisters%20Using%20The%20ICP%20JavaScript%20A/Screenshot_2025-08-21_at_15.39.03.png)
 
-The reason the mint function failed above is because we have not configured ICP Javascript Agent to using the identity which deployed the canister.
+By default, if no identity is attached to the HTTP agent, all update calls are treated as coming from the **anonymous principal**. Since mint() is restricted to the canister owner, calls made by an anonymous identity are rejected.
 
-We can check our Principal by calling `agent.getPrincipal()`
+We can confirm which identity the agent is currently using:
 
 ```rust
 const principal = await agent.getPrincipal();
@@ -245,33 +270,31 @@ console.log('Current identity principal (agent):', currentIdentity);
 
 The output is as follows:
 
-![Screenshot 2025-08-21 at 16.03.16.png](../.gitbook/assets/Screenshot_2025-08-21_at_16.03.16.png)
+![Screenshot 2025-08-21 at 16.03.16.png](Interact%20with%20Canisters%20Using%20The%20ICP%20JavaScript%20A/Screenshot_2025-08-21_at_16.03.16.png)
 
-If we do not attach an identity, all calls from the script is classified to have come from the anonymous principal.
+If you haven’t configured an identity yet, this will return the anonymous principal.
 
-We can export the registered owner’s identity from dfx and use it in the `icp_javascript_agent`, here’s how.
+To successfully call `mint()`, we must configure the agent to use **the same identity that deployed the canister**.
 
 ## Signed Transactions from ICP Javascript Agent
 
-In order to call `mint()`, ICP Javascript Agent needs to use the identity that dfx used to deploy the canister. We can use the identity by exporting the private keys from dfx and importing it into ICP Javascript agent.
+To attach the owner’s identity, we’ll export it from dfx and load it into our JavaScript code. This allows the agent to **sign update calls**, proving to the canister that the request comes from an authorized principal.
 
 ### Export dfx identity
 
-In your terminal run:
+In your terminal, run:
 
 ```rust
 dfx identity export
 ```
 
-This would export your private key, it looks like this:
+This command outputs the private key of the currently active dfx identity in PEM format.
 
-![Screenshot 2025-08-21 at 16.06.55.png](../.gitbook/assets/Screenshot_2025-08-21_at_16.06.55.png)
+![Screenshot 2025-08-21 at 16.06.55.png](Interact%20with%20Canisters%20Using%20The%20ICP%20JavaScript%20A/Screenshot_2025-08-21_at_16.06.55.png)
 
 ### Import the private key
 
-Within your icp\_javascript\_agent folder, create a new file called `owner.pem` and copy paste the private key that we just exported from dfx. `.pem` is a file format for storing private keys.
-
-`owner.pem`
+Inside the `icp_javascript_agent` directory, create a new file named `owner.pem` and paste the exported private key into it. The `.pem` format is commonly used for storing cryptographic private keys.
 
 ```
 -----BEGIN EC PRIVATE KEY-----
@@ -281,13 +304,13 @@ oUQDQgAEPas6Iag4TUx+Uop+3NhE6s3FlayFtbwdhRVjvOar0kPTfE/N8N6btRnd
 -----END EC PRIVATE KEY-----
 ```
 
-We’ll need to install the cryptographic library that…:
+We’ll need to install the cryptographic library for generating identities:
 
 ```jsx
 npm i @dfinity/identity-secp256k1
 ```
 
-import the library:
+Import the library:
 
 ```jsx
 import { Secp256k1KeyIdentity } from '@dfinity/identity-secp256k1';
@@ -303,7 +326,7 @@ const currentIdentity = principal.toText();
 console.log('Current identity principal (agent):', currentIdentity);
 ```
 
-The code above should return the same principal as the owner as long as you have exported the same identity that you used to deploy token\_canister.
+The code above should return the same principal as the owner as long as you have exported the same identity that you used to deploy token_canister.
 
 Now that we have set our identity to be the owner’s identity we can mint tokens to any Principal.
 
@@ -390,22 +413,22 @@ If you want to test it, set the parameters of `transfer_tokens` to `transfer_tok
 
 We believe to have given enough examples to use ICP Javascript Agent. An exercise we have for you is to call the approve and transfer-from function yourself.
 
-* `Approve(spender, amount)`. The caller of the function agrees that the spender can manage `amount` amount of tokens in behalf of the caller.
-* `ALLOWANCE()` is where the token delegation information is stored
-* `Transfer_from(owner, to , amount)` allows the spender to transfer the owner’s tokens.
+- `Approve(spender, amount)`. The caller of the function agrees that the spender can manage `amount` amount of tokens in behalf of the caller.
+- `ALLOWANCE()` is where the token delegation information is stored
+- `Transfer_from(owner, to , amount)` allows the spender to transfer the owner’s tokens.
 
 ## Exercise: Thief Thiel
 
-`Default` has entrusted Thiel to spend his token wisely, however, Thiel has ulterior motives and wants to take all of his tokens for himself. `Default` mints 1000 tokens and approves thiel to spend all of it.
+`Default` has entrusted Thiel to spend his token wisely, however, Thiel has ulterior motives and wants to take all of his tokens for himself. `Default` mints 1000 tokens and approves thiel to spend all of it. 
 
 Create another dfx idenitty and name it `Thiel`. Then, re-enact the case scenario above as `Thiel` and steal `Default`’s tokens.
 
 Token balances before:
 
-* `Default` : 1000 RareSkills Tokens
-* `Thiel` : 0 RareSkills Tokens
+- `Default` : 1000 RareSkills Tokens
+- `Thiel` : 0 RareSkills Tokens
 
 Token balances after:
 
-* `Default` : 0 RareSkills Tokens
-* `Thiel` : 1000 RareSkills Tokens
+- `Default` : 0 RareSkills Tokens
+- `Thiel` : 1000 RareSkills Tokens
