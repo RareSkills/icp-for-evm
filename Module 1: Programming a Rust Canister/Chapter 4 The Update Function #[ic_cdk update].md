@@ -1,4 +1,4 @@
-# The Update Function: #\[ic\_cdk::update]
+# The Update Function #\[ic\_cdk::update]
 
 Functions that are annotated with the `#[ic_cdk::update]` attribute macro have state-changing permission.
 
