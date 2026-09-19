@@ -1,8 +1,8 @@
-# unbounded_wait() vs bounded_wait()
+# unbounded\_wait() vs bounded\_wait()
 
 **Some functions can execute in milliseconds, while others may take several seconds or longer**. This usually depends on how much computation the function performs.
 
-When one canister calls another, the calling canister does not actively wait for the result. Instead, as soon as it reaches an await, the Internet Computer pauses that function’s execution. 
+When one canister calls another, the calling canister does not actively wait for the result. Instead, as soon as it reaches an await, the Internet Computer pauses that function’s execution.
 
 While this paused call is waiting, the canister itself is still active and can continue handling other incoming requests. Once the response comes back—or a timeout is reached—the paused function resumes exactly where it left off.
 
@@ -35,11 +35,11 @@ If you invoke this function directly—for example, from the Candid UI—you’l
 
 This delay makes `loop_block()` a useful test case for understanding what happens when one canister calls another and has to wait for a response.
 
-![Screenshot 2025-08-27 at 18.49.43.png](unbounded-wait-vs-bounded-wait/screenshot-2025-08-27-at-18.49.43.png)
+![Screenshot 2025-08-27 at 18.49.43.png](.gitbook/assets/screenshot-2025-08-27-at-18.49.43.png)
 
-### **How unbounded_wait() Affects Execution Time**
+### **How unbounded\_wait() Affects Execution Time**
 
-Now that we have a function that takes a noticeable amount of time to complete, let’s see what happens when it is called from another canister. 
+Now that we have a function that takes a noticeable amount of time to complete, let’s see what happens when it is called from another canister.
 
 ```rust
 use candid::Principal;
@@ -66,13 +66,13 @@ async fn call_loop_block(canister_b: Principal) -> u64 {
 ic_cdk::export_candid!();
 ```
 
-In the example above, the **caller canister** invokes the `loop_block()` method defined in the **callee canister** using `Call::unbounded_wait()`. 
+In the example above, the **caller canister** invokes the `loop_block()` method defined in the **callee canister** using `Call::unbounded_wait()`.
 
 This means the caller is willing to wait for the response for as long as it takes.
 
 As a result, the `call_loop_block()` method in caller canister does not complete until the callee finishes executing `loop_block()`, causing the overall call to take roughly 15 seconds.
 
-![Screenshot 2025-08-27 at 18.51.24.png](unbounded-wait-vs-bounded-wait/screenshot-2025-08-27-at-18.51.24.png)
+![Screenshot 2025-08-27 at 18.51.24.png](.gitbook/assets/screenshot-2025-08-27-at-18.51.24.png)
 
 One limitation of using `Call::unbounded_wait()` is that the caller has no upper bound on how long it is willing to wait for a response. If the **callee canister** delays its reply—whether due to heavy computation, a stalled execution, or a failure to route the response—the function call from **caller canister** will take long time to respond or it would never respond.
 
@@ -112,8 +112,8 @@ ic_cdk::export_candid!();
 
 When this function is called, it fails with a **Call Deadline Expired** error. This happens because the caller only waits 5 seconds for a response, while the callee takes over 13 seconds to finish executing.
 
-![Screenshot 2025-08-29 at 22.45.23.png](unbounded-wait-vs-bounded-wait/screenshot-2025-08-29-at-22.45.23.png)
+![Screenshot 2025-08-29 at 22.45.23.png](.gitbook/assets/screenshot-2025-08-29-at-22.45.23.png)
 
-We’ll get a “*Call deadline has expired error”*, although the canister finishes executing. Since we only give the inter-canister call 5 seconds to return a response but it takes 13 seconds at least to respond. 
+We’ll get a “_Call deadline has expired error”_, although the canister finishes executing. Since we only give the inter-canister call 5 seconds to return a response but it takes 13 seconds at least to respond.
 
 It’s important to note that timing out the call does **not** stop the callee canister from executing its function. The caller simply stops waiting for the response. Meanwhile, the canister continues processing other queued messages and will only resume the paused execution if a reply arrives within the configured time limit. We’ll explore this execution model in more detail in the next article

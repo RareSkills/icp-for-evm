@@ -1,12 +1,12 @@
 # Transfer Cycles Between Canisters
 
-Cycles can be sent directly from one canister to another as part of an inter-canister call using the `.with_cycles()` method. 
+Cycles can be sent directly from one canister to another as part of an inter-canister call using the `.with_cycles()` method.
 
 A canister might require that you attach cycles to cover their execution cost or to add economic disincentive towards malicious actors draining the canister’s cycles.
 
 ### `.with_cycles()` sends Cycles to the Called Canister
 
-The `.with_cycles(amount)` method allows a canister to attach cycles to an inter-canister call. When the call is made, amount cycles are deducted from the caller canister’s balance and included in the outgoing call message sent to the callee. 
+The `.with_cycles(amount)` method allows a canister to attach cycles to an inter-canister call. When the call is made, amount cycles are deducted from the caller canister’s balance and included in the outgoing call message sent to the callee.
 
 Attaching cycles alone does not guarantee that the callee will receive them; the receiving function must explicitly accept the cycles during execution.
 
@@ -23,7 +23,7 @@ async fn attach_cycles(_callee: Principal){
 }
 ```
 
-This is analogous to Solidity’s low-level `.call` with `value`:
+This is analogous to Solidity’s low-level `.call` with `value`:
 
 ```solidity
 function attachEtherRaw(address payable callee) external payable {
@@ -70,7 +70,7 @@ If the receiving function doesn’t implement `msg_cycles_accept`, it would not 
 
 ### Simple POC of Sending Cycles
 
-To put everything we have learned into practice, consider two canisters: **canister A** (the caller) and **canister B** (the callee)  shown below.
+To put everything we have learned into practice, consider two canisters: **canister A** (the caller) and **canister B** (the callee) shown below.
 
 `canister A`
 
@@ -122,7 +122,7 @@ dfx canister status <canister_a_id>
 
 Then, invoke the `send_cycles()` function on canister A, specifying canister B as the callee and attaching a chosen amount of cycles.
 
-![Screenshot 2025-08-27 at 01.44.14.png](transfer-cycles-between-canisters/screenshot-2025-08-27-at-01.44.14.png)
+![Screenshot 2025-08-27 at 01.44.14.png](.gitbook/assets/screenshot-2025-08-27-at-01.44.14.png)
 
 After the call completes, check the cycles balance of both canisters again using the same `dfx canister status` command. You should observe that canister B’s cycles balance has increased by the number of cycles it accepted, while canister A’s balance has decreased by the same amount (excluding execution costs). This confirms that cycles were successfully transferred during the inter-canister call.
 
@@ -166,7 +166,7 @@ ic_cdk::export_candid!();
 
 Re-deploy the callee canister and call `attach_cycles` from the caller canister.
 
-![Screenshot 2025-08-27 at 01.50.01.png](transfer-cycles-between-canisters/screenshot-2025-08-27-at-01.50.01.png)
+![Screenshot 2025-08-27 at 01.50.01.png](.gitbook/assets/screenshot-2025-08-27-at-01.50.01.png)
 
 We can see that the cycles was fully refunded because the called canister function does not implement `msg_cycles_accept()`.
 
@@ -209,8 +209,8 @@ fn expensive_with_min_fee() {
 
 **What’s Happening**
 
-- The caller must attach **at least `MIN_FEE` cycles**.
-- The canister explicitly accepts only `MIN_FEE`, which becomes the execution fee.
-- Any additional cycles are **automatically refunded** to the caller at the end of the call.
+* The caller must attach **at least `MIN_FEE` cycles**.
+* The canister explicitly accepts only `MIN_FEE`, which becomes the execution fee.
+* Any additional cycles are **automatically refunded** to the caller at the end of the call.
 
 This creates a **hard economic barrier**: repeatedly calling this function requires paying real cycles, making abuse and spam economically costly.

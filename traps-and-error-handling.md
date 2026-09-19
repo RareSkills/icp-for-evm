@@ -1,6 +1,6 @@
 # Traps and Error Handling
 
-This article discusses how to revert (trap) functions and handle logic or runtime errors in Rust canisters. 
+This article discusses how to revert (trap) functions and handle logic or runtime errors in Rust canisters.
 
 Ethereum developers typically guard against errors by using revert checks that abort execution and roll back state changes. For example:
 
@@ -15,21 +15,21 @@ contract RevertExample {
 }
 ```
 
-On ICP, the equivalent of reverting a function is to call the `trap("error message")` API.
+On ICP, the equivalent of reverting a function is to call the `trap("error message")` API.
 
 ## Reverting Execution in Rust Canisters
 
 With that comparison in mind, let’s look at how execution is aborted in Rust canisters on the Internet Computer.
 
-### **Reverting with `trap()`**
+### **Reverting with `trap()`**
 
-`trap()` is a System API that tells the runtime to abort execution and roll back the state changes made by the current call (this is only true if the function call does not perform an inter-canister call).
+`trap()` is a System API that tells the runtime to abort execution and roll back the state changes made by the current call (this is only true if the function call does not perform an inter-canister call).
 
 ```rust
 use ic_cdk::api::trap;
 ```
 
-`trap("error message")` takes a string slice (`&str`) as its argument. When the trap is triggered, execution immediately aborts and the provided message is returned to the caller as the trap error.
+`trap("error message")` takes a string slice (`&str`) as its argument. When the trap is triggered, execution immediately aborts and the provided message is returned to the caller as the trap error.
 
 ```rust
 use ic_cdk::api::trap;
@@ -49,7 +49,7 @@ ic_cdk::export_candid!();
 
 Deploy the canister above and assign argument `b` as **0**. The function would return an error along with the custom trap error message.
 
-![Screenshot 2025-12-04 at 20.30.47.png](traps-and-error-handling/screenshot-2025-12-04-at-20.30.47.png)
+![Screenshot 2025-12-04 at 20.30.47.png](.gitbook/assets/screenshot-2025-12-04-at-20.30.47.png)
 
 ## Revert with the `assert!()`
 
@@ -70,26 +70,26 @@ ic_cdk::export_candid!();
 
 Deploy the canister above and call `safeDivide()`, you would also expect to see the “division by zero” error message.
 
-![Screenshot 2025-12-04 at 20.22.21.png](traps-and-error-handling/screenshot-2025-12-04-at-20.22.21.png)
+![Screenshot 2025-12-04 at 20.22.21.png](.gitbook/assets/screenshot-2025-12-04-at-20.22.21.png)
 
 A panic at runtime under the hood causes the canister to `trap()`. Therefore using both traps and asserts are acceptable, the utilization of `trap()` or `assert!()` depends on your preference.
 
 ### **Limitations Associated with Reverts**
 
-Reverting transactions with `trap()` can be tricky. In the case where the function call involves calling another canister (inter-canister calls), a revert would only **partially rollback** some of the state-changes that were made (the details are discussed in the fourth module). This could leave our canister in an awkward situation where only some of the state-changes were rolled back, and some, permanently committed. 
+Reverting transactions with `trap()` can be tricky. In the case where the function call involves calling another canister (inter-canister calls), a revert would only **partially rollback** some of the state-changes that were made (the details are discussed in the fourth module). This could leave our canister in an awkward situation where only some of the state-changes were rolled back, and some, permanently committed.
 
 ## **Returning Errors Instead of Reverting**
 
-To avoid these pitfalls, instead of forcefully reverting execution when an error occurs, we can design our functions to **return an explicit success or failure value**.The simplest approach is to return a **boolean**:
+To avoid these pitfalls, instead of forcefully reverting execution when an error occurs, we can design our functions to **return an explicit success or failure value**.The simplest approach is to return a **boolean**:
 
-- true indicates that the function completed successfully
-- false indicates that the function encountered an error
+* true indicates that the function completed successfully
+* false indicates that the function encountered an error
 
-However, a boolean only tells us *that* something went wrong—not *why*. To address this, Rust provides the Result type, which allows functions to return detailed error information. 
+However, a boolean only tells us _that_ something went wrong—not _why_. To address this, Rust provides the Result type, which allows functions to return detailed error information.
 
 ### **Boolean-Based Error Handling**
 
-To understand this idea more concretely, let’s consider a storage variable called EVEN_ONLY, which is meant to store only even numbers.
+To understand this idea more concretely, let’s consider a storage variable called EVEN\_ONLY, which is meant to store only even numbers.
 
 ```rust
 use std::cell::RefCell;
@@ -99,7 +99,7 @@ thread_local!{
 }
 ```
 
-To enforce this rule, we’ll add an a `set_even_only()` function that only allows even numbers to be saved to `EVEN_ONLY`.
+To enforce this rule, we’ll add an a `set_even_only()` function that only allows even numbers to be saved to `EVEN_ONLY`.
 
 ```rust
 use std::cell::RefCell;
@@ -123,10 +123,10 @@ fn set_even_only(new_number : u64) -> bool {
 
 The `if` statement is used to check whether the number is even— if it is, store the number, if not, do nothing. Then, to return a success or failure indicator, we can return a boolean.
 
-- `true` means that the function logic passed,
-- `false` means that some business logic was violated or some other errors.
+* `true` means that the function logic passed,
+* `false` means that some business logic was violated or some other errors.
 
-The drawback of this approach is that the function can only return a single false value, without indicating **why** the operation failed. If multiple error conditions are possible, there’s no way to tell which one occurred.To illustrate this limitation, we’ll update set_even_only to enforce two separate conditions:
+The drawback of this approach is that the function can only return a single false value, without indicating **why** the operation failed. If multiple error conditions are possible, there’s no way to tell which one occurred.To illustrate this limitation, we’ll update set\_even\_only to enforce two separate conditions:
 
 1. The number has to be even, **and**
 2. Only the owner can make changes
@@ -171,16 +171,16 @@ fn set_even_only(new_number: u64) -> bool {
 
 ```
 
-A simple `false` return gives no indication of whether the failure was due to invalid input (odd number) or insufficient access permission (caller is not the owner). By having the function return a `Result<T, E>` type, we can communicate explicitly why the operation failed.
+A simple `false` return gives no indication of whether the failure was due to invalid input (odd number) or insufficient access permission (caller is not the owner). By having the function return a `Result<T, E>` type, we can communicate explicitly why the operation failed.
 
 ## The Result Type: `Result<T,E>`
 
-The Result type, `Result<T,E>`, allows functions to return a clear success or error signal without failing the function and provide an attached value to either signal : 
+The Result type, `Result<T,E>`, allows functions to return a clear success or error signal without failing the function and provide an attached value to either signal :
 
-- Success signal: `Ok(payload)`
-- Error signal: `Err(payload)`
+* Success signal: `Ok(payload)`
+* Error signal: `Err(payload)`
 
-Continuing from the even number example above, we’ll have the function return a `Result<T,E>` type. `Result` returns wraps your return value in an `Ok()` or `Err()` wrapper. `Ok()` indicating success and `Err()` indicator failure. 
+Continuing from the even number example above, we’ll have the function return a `Result<T,E>` type. `Result` returns wraps your return value in an `Ok()` or `Err()` wrapper. `Ok()` indicating success and `Err()` indicator failure.
 
 ```rust
 use std::cell::RefCell;
@@ -201,22 +201,22 @@ fn set_even_only(new_number : u64) -> Result<String,String> {
 }
 ```
 
-The value that’s wrapped is defined in the `Result<T,E>`. 
+The value that’s wrapped is defined in the `Result<T,E>`.
 
-- `T` is the type to return in the `Ok()` case, left hand side, and
-- `E` is the type to return in the `Err()` case, right hand side.
+* `T` is the type to return in the `Ok()` case, left hand side, and
+* `E` is the type to return in the `Err()` case, right hand side.
 
 If its a success, it returns “success” wrapped in by `Ok()` and
 
-![Screenshot 2025-10-01 at 15.34.32.png](traps-and-error-handling/screenshot-2025-10-01-at-15.34.32.png)
+![Screenshot 2025-10-01 at 15.34.32.png](.gitbook/assets/screenshot-2025-10-01-at-15.34.32.png)
 
 in the fail case, “Not an Even Number” wrapped in an `Err()`
 
-![Screenshot 2025-10-01 at 15.34.42.png](traps-and-error-handling/screenshot-2025-10-01-at-15.34.42.png)
+![Screenshot 2025-10-01 at 15.34.42.png](.gitbook/assets/screenshot-2025-10-01-at-15.34.42.png)
 
 ### Using `enums` for Structured Errors
 
-Using enums, we can define a fixed set of possible error cases that our function might return. For example, instead of just returning `"Not an Even Number".to_string()`, we can define an enum that captures the possible errors in our function:
+Using enums, we can define a fixed set of possible error cases that our function might return. For example, instead of just returning `"Not an Even Number".to_string()`, we can define an enum that captures the possible errors in our function:
 
 ```rust
 #[derive(Debug)]
@@ -226,7 +226,7 @@ enum SetEvenError {
 }
 ```
 
-Now we can update our `set_even_only` function to return a `Result<T, SetEvenError>`. This way, the caller knows whether the error was due to the number not being even, or because the caller was not the owner.
+Now we can update our `set_even_only` function to return a `Result<T, SetEvenError>`. This way, the caller knows whether the error was due to the number not being even, or because the caller was not the owner.
 
 ```rust
 use std::cell::RefCell;
@@ -253,11 +253,11 @@ fn set_even_only(new_number: u64, caller: String) -> Result<String, SetEvenError
 
 ```
 
-Another advantage of enums is that they are easy to extend. If later we wanted to add a new rule, like requiring the number to be less than 100, we could just add a new `TooLarge` case to the `SetEvenError` enum and update the function accordingly.
+Another advantage of enums is that they are easy to extend. If later we wanted to add a new rule, like requiring the number to be less than 100, we could just add a new `TooLarge` case to the `SetEvenError` enum and update the function accordingly.
 
-This structured approach makes it much clearer to both developers and users why a function failed, and it ensures that all possible error cases are considered at compile time. 
+This structured approach makes it much clearer to both developers and users why a function failed, and it ensures that all possible error cases are considered at compile time.
 
 To summarize, returning an error indicator is encouraged because:
 
-1. Reverting implicates an inconsistent  state roll-back due to asynchronous execution. 
+1. Reverting implicates an inconsistent state roll-back due to asynchronous execution.
 2. Provides Good UI to the client to resolve errors quickly.

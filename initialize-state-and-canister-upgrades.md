@@ -1,6 +1,6 @@
 # Initialize State and Canister Upgrades
 
-Constructors are used to initialize smart contract data such as the contract’s owner, admin roles, or token names. Rust canisters define their initialization logic with functions annotated with the `#[ic_cdk::init]` attribute macro:
+Constructors are used to initialize smart contract data such as the contract’s owner, admin roles, or token names. Rust canisters define their initialization logic with functions annotated with the `#[ic_cdk::init]` attribute macro:
 
 ```rust
 // Constructor
@@ -8,7 +8,7 @@ Constructors are used to initialize smart contract data such as the contract’s
 fn init() {}
 ```
 
-The initialization function (`init()`) is executed once, when the canister is deployed. This serves the same role as a Solidity constructor — it runs once when the canister is deployed and sets up the initial state. 
+The initialization function (`init()`) is executed once, when the canister is deployed. This serves the same role as a Solidity constructor — it runs once when the canister is deployed and sets up the initial state.
 
 For example, here's a Solidity contract that sets its name during deployment:
 
@@ -90,11 +90,11 @@ dfx deploy
 
 Pass “**RareSkills**” as your string parameter to the initialization argument. Then, type `y` to confirm it.
 
-![Screenshot 2025-10-24 at 21.11.28.png](initialize-state-and-canister-upgrades/screenshot-2025-10-24-at-21.11.28.png)
+![Screenshot 2025-10-24 at 21.11.28.png](.gitbook/assets/screenshot-2025-10-24-at-21.11.28.png)
 
-In the Candid UI, querying `name()` should return `RareSkills`.
+In the Candid UI, querying `name()` should return `RareSkills`.
 
-![Screenshot 2025-08-19 at 00.20.26.png](initialize-state-and-canister-upgrades/e5e7f611-4b04-4ec6-b4f2-adedf7d2d17c.png)
+![Screenshot 2025-08-19 at 00.20.26.png](.gitbook/assets/e5e7f611-4b04-4ec6-b4f2-adedf7d2d17c.png)
 
 ## Canister’s Are Upgradeable
 
@@ -105,11 +105,11 @@ The effects of re-deploying the canister are two:
 1. The Bytecode is upgraded and
 2. The canister’s temporary storage is re-set into a clean slate (Canisters have a temporary storage and stable storage, we’ll discuss this shortly).
 
-Since upgrading a contract means that the canister loses it’s previous state, it would mean that the second time we try to re-deploy the canister, our variable would not be initialized. 
+Since upgrading a contract means that the canister loses it’s previous state, it would mean that the second time we try to re-deploy the canister, our variable would not be initialized.
 
 ## The Initialization Function Only Works During The First Deployment
 
-The initialization function is triggered only for the first time we deploy our canister. Subsequent re-deploys (canister upgrades) would not trigger the initialization function despite the dfx CLI asking prompting us for the initialization arguments. 
+The initialization function is triggered only for the first time we deploy our canister. Subsequent re-deploys (canister upgrades) would not trigger the initialization function despite the dfx CLI asking prompting us for the initialization arguments.
 
 To test that the `init()` function wouldn’t work a second time, let’s add another empty string variable `SYMBOL`, and a query function to read it, `symbol()`.
 
@@ -176,11 +176,11 @@ ic_cdk::export_candid!();
 
 Now re-deploy your canister and pass “**RareSkills**” as the first string parameter and “**RS**” as the second.
 
-![Screenshot 2025-10-24 at 22.05.19.png](initialize-state-and-canister-upgrades/screenshot-2025-10-24-at-22.05.19.png)
+![Screenshot 2025-10-24 at 22.05.19.png](.gitbook/assets/screenshot-2025-10-24-at-22.05.19.png)
 
 Query `NAME` and `SYMBOL`, you’ll find that the both their value are empty strings.
 
-![Screenshot 2025-10-24 at 22.19.27.png](initialize-state-and-canister-upgrades/screenshot-2025-10-24-at-22.19.27.png)
+![Screenshot 2025-10-24 at 22.19.27.png](.gitbook/assets/screenshot-2025-10-24-at-22.19.27.png)
 
 The initialization works only for the first time we deploy a canister, upgrading the canister with `dfx deploy` wouldn’t trigger the constructor. However, the initialization logic would work if we **re-install** our canister.
 
@@ -192,7 +192,7 @@ To trigger the constructor again, we must **re-install** the canister instead of
 
 So, what’s the difference between upgrading and re-installing a canister?
 
-The difference lies in how the canister’s storage is handled. ICP canisters have two types of storage: **temporary storage** (often called the *heap*) and **stable storage** (also called *stable memory*).
+The difference lies in how the canister’s storage is handled. ICP canisters have two types of storage: **temporary storage** (often called the _heap_) and **stable storage** (also called _stable memory_).
 
 When a canister is upgraded, the canister’s code is replaced, but its stable storage is preserved. The temporary storage, however, is reset. Because the canister is not treated as a fresh installation, the initialization function is not executed again.
 
@@ -212,20 +212,19 @@ dfx deploy init_function_backend --mode=reinstall
 
 Run the command above and pass “**RareSkills**” and “**RS**” to the initialization arguments again. You’ll find that `NAME` and `SYMBOL` was properly initialized.
 
-![Screenshot 2025-10-24 at 22.45.40.png](initialize-state-and-canister-upgrades/screenshot-2025-10-24-at-22.45.40.png)
+![Screenshot 2025-10-24 at 22.45.40.png](.gitbook/assets/screenshot-2025-10-24-at-22.45.40.png)
 
 To summarize, canister contracts are upgradeable and there are two types of canister upgrades:
 
-1. **Normal upgrade** — does **not** call the initialization function and **preserves stable memory**; the in-memory heap (temporary state where our storage variables are kept) is reset:
-    
+1.  **Normal upgrade** — does **not** call the initialization function and **preserves stable memory**; the in-memory heap (temporary state where our storage variables are kept) is reset:
+
     ```rust
     dfx deploy <Canister_Name>
     ```
-    
-2. **Reinstall** — **calls the initialization function again** and **clears both the heap and stable memory**:
-    
+2.  **Reinstall** — **calls the initialization function again** and **clears both the heap and stable memory**:
+
     ```rust
     dfx deploy <Canister_Name> --mode=reinstall
     ```
-    
+
     Use this command if you are not using the stable storage and you want to trigger the initialization function again.

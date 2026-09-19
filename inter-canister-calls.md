@@ -1,8 +1,8 @@
 # Inter-Canister Calls
 
-Smart contracts often need to interact with other contracts to share liquidity, compose with external protocols, or access shared infrastructure. In this article, we’ll learn how canisters can call functions from another canister. 
+Smart contracts often need to interact with other contracts to share liquidity, compose with external protocols, or access shared infrastructure. In this article, we’ll learn how canisters can call functions from another canister.
 
-![Untitled-2025-06-09-1626.excalidraw-5.png](inter-canister-calls/untitled-2025-06-09-1626.excalidraw-5.png)
+![Untitled-2025-06-09-1626.excalidraw-5.png](.gitbook/assets/untitled-2025-06-09-1626.excalidraw-5.png)
 
 ## The `Call` System API
 
@@ -14,52 +14,50 @@ use ic_cdk::call::Call;
 
 `Call` is a **builder struct** that lets you configure and execute an inter-canister call. To create a `Call`, you can use one of two constructor functions:
 
-- `Call::unbounded_wait(...)`
-- `Call::bounded_wait(...)`
+* `Call::unbounded_wait(...)`
+* `Call::bounded_wait(...)`
 
 Both constructors take two arguments:
 
-- the **target canister principal** (`Principal`), and
-- the **method name** (the function you want to call on that canister).
+* the **target canister principal** (`Principal`), and
+* the **method name** (the function you want to call on that canister).
 
 Here’s what constructing an inter-canister call looks like:
 
-- **`Call::unbounded_wait()`:**
-    
+*   **`Call::unbounded_wait()`:**
+
     ```rust
     use ic_cdk::call::Call;
-    
+
     async fn inter_canister_call() {
-    
+
     		// Unbounded Wait
     		let result = Call::unbounded_wait("target_canister", "function_name").await;
     }
     ```
-    
-- **`Call::bounded_wait()`:**
-    
+*   **`Call::bounded_wait()`:**
+
     ```rust
     use ic_cdk::call::Call;
-    
+
     async fn inter_canister_call() {
     		
     		// Bounded Wait
     		let result = Call::bounded_wait("target_canister", "function_name").await;
     }
     ```
-    
 
 The difference lies in their **wait policy**:
 
-- `unbounded_wait` waits **indefinitely** for the callee’s response.
-- `bounded_wait` waits for a **bounded amount of time**, after which the call fails if no response is received.
+* `unbounded_wait` waits **indefinitely** for the callee’s response.
+* `bounded_wait` waits for a **bounded amount of time**, after which the call fails if no response is received.
 
 We’ll revisit this distinction later.
 
 After constructing a Call, you can further configure it using builder methods such as:
 
-- `.with_args(...)` to attach arguments
-- `.with_cycles(...)` to send Cycles to the callee
+* `.with_args(...)` to attach arguments
+* `.with_cycles(...)` to send Cycles to the callee
 
 ## Inter-canister calls are asynchronous
 
@@ -67,7 +65,7 @@ Inter-canister calls execute **asynchronously**. This means that once a call is 
 
 ### `.await` and `async`
 
-In Rust, calling an asynchronous function or System API must be followed by the `.await` keyword. Without `.await`, the function will not actually be executed. Therefore, `Call::unbounded_wait()` **must** be followed by `.await` to call the function as shown in the code snippet below.
+In Rust, calling an asynchronous function or System API must be followed by the `.await` keyword. Without `.await`, the function will not actually be executed. Therefore, `Call::unbounded_wait()` **must** be followed by `.await` to call the function as shown in the code snippet below.
 
 ```rust
 use ic_cdk::call::Call;
@@ -80,7 +78,7 @@ fn inter_canister_call() {
 }
 ```
 
-Because `.await` is used, the function that calls `Call::unbounded_wait()` **must** be declared as `async` as shown in the example below:
+Because `.await` is used, the function that calls `Call::unbounded_wait()` **must** be declared as `async` as shown in the example below:
 
 ```rust
 use ic_cdk::call::Call;
@@ -94,19 +92,19 @@ async fn inter_canister_call() {
 }
 ```
 
-## **The `Call` System API Returns** a `Result`
+## **The `Call` System API Returns** a `Result`
 
-The response that the `Call` API returns will be a `Result` type. Specifically, `Ok(Response)` or `Err(CallFailed)`.
+The response that the `Call` API returns will be a `Result` type. Specifically, `Ok(Response)` or `Err(CallFailed)`.
 
-- `Ok(Response)` means the inter-canister call is successful. `Response` is a raw candid encoded value returned by the remote function.
-- `Err(CallFailed)` means that the inter-canister call failed. `CallFailed` is an error type containing a rejection code and a message that describes **why** the call failed. Details of this error type will be discussed later.
+* `Ok(Response)` means the inter-canister call is successful. `Response` is a raw candid encoded value returned by the remote function.
+* `Err(CallFailed)` means that the inter-canister call failed. `CallFailed` is an error type containing a rejection code and a message that describes **why** the call failed. Details of this error type will be discussed later.
 
 ### A Simple Check for an `Ok(Response)` or `Err(CallFailed)`
 
-To simply identify whether the inter-canister call succeeded, we can use the `.is_ok()` method. It returns:
+To simply identify whether the inter-canister call succeeded, we can use the `.is_ok()` method. It returns:
 
-- `true` if the `Result` is `Ok(Response)`,
-- `false` if it is `Err(error)`.
+* `true` if the `Result` is `Ok(Response)`,
+* `false` if it is `Err(error)`.
 
 Here’s a code snippet that shows how to use `.is_ok()` on `result`.
 
@@ -122,7 +120,7 @@ async fn inter_canister(_Callee: Principal) -> bool {
 }
 ```
 
-In Solidity, this is similar to a low-level contract call. The example below shows a low-level call that plays a role similar to `Call::unbounded_wait()`. The `bool ok` value is analogous to calling `.is_ok()` in our Rust code: it indicates whether the call succeeded.
+In Solidity, this is similar to a low-level contract call. The example below shows a low-level call that plays a role similar to `Call::unbounded_wait()`. The `bool ok` value is analogous to calling `.is_ok()` in our Rust code: it indicates whether the call succeeded.
 
 ```rust
 function callFunction(address target) external returns (bool) {
@@ -153,7 +151,7 @@ ic_cdk::export_candid!();
 
 Deploy `Canister B` and note its **Canister ID** (for example: `u6s2n-gx777-77774-qaaba-cai`). We’ll need this principal when calling it from Canister A.
 
-![Screenshot 2025-08-28 at 15.22.58.png](inter-canister-calls/bb1944ae-aeda-4d26-a9f1-1c1385219a99.png)
+![Screenshot 2025-08-28 at 15.22.58.png](.gitbook/assets/bb1944ae-aeda-4d26-a9f1-1c1385219a99.png)
 
 Next, we create **Canister A**, which performs the inter-canister call.
 
@@ -178,15 +176,14 @@ In above canister, the `call_do_nothing()` function does the following:
 
 Deploy Canister A, then invoke `call_do_nothing`, passing **Canister B’s principal** as the argument.
 
-![Screenshot 2025-08-28 at 16.10.48.png](inter-canister-calls/screenshot-2025-08-28-at-16.10.48.png)
+![Screenshot 2025-08-28 at 16.10.48.png](.gitbook/assets/screenshot-2025-08-28-at-16.10.48.png)
 
 When `call_do_nothing` is executed:
 
-1. `Call::unbounded_wait(canister_b, "do_nothing").await` returns a value of type
-`Result<Response, CallFailed>`.
+1. `Call::unbounded_wait(canister_b, "do_nothing").await` returns a value of type `Result<Response, CallFailed>`.
 2. `.is_ok()` checks whether the result is wrapped in `Ok(...)`
-    1. Returns true for `Ok(Response)`
-    2. Returns false for `Err(CallFailed)`
+   1. Returns true for `Ok(Response)`
+   2. Returns false for `Err(CallFailed)`
 
 A successful inter-canister call always yields `Ok(Response)`, where `Response` contains the raw return value of the called function (empty in this example).
 
@@ -199,11 +196,11 @@ Upon setting the wrong canister ID or an invalid method, the result that the `Ca
 3. The Cycles balance of the target canister is insufficient to execute your inter-canister call.
 4. The network failed to route your call (cases of such are rare).
 
-In Canister `A`, slightly change the target canister’s principal so that it’s wrong. `call_do_nothing` would return **false**.
+In Canister `A`, slightly change the target canister’s principal so that it’s wrong. `call_do_nothing` would return **false**.
 
-![Screenshot 2025-08-28 at 17.51.33.png](inter-canister-calls/screenshot-2025-08-28-at-17.51.33.png)
+![Screenshot 2025-08-28 at 17.51.33.png](.gitbook/assets/screenshot-2025-08-28-at-17.51.33.png)
 
-What’s happening is that `Call::unbounded_wait()` returns an error, `Err(CallFailed)`. `.is_ok()` returns `false` if the response is an `Err(CallFailed)`.
+What’s happening is that `Call::unbounded_wait()` returns an error, `Err(CallFailed)`. `.is_ok()` returns `false` if the response is an `Err(CallFailed)`.
 
 ### Inspecting the `CallFailed` message
 
@@ -240,7 +237,7 @@ In the above code, we:
 
 Re-deploy the canister and call the `call_do_noting()` function. You will observe that the inter-canister call fails with the error message: **“Canister has no update method `do_nothing()`.**
 
-![Screenshot 2025-08-29 at 15.06.48.png](inter-canister-calls/screenshot-2025-08-29-at-15.06.48.png)
+![Screenshot 2025-08-29 at 15.06.48.png](.gitbook/assets/screenshot-2025-08-29-at-15.06.48.png)
 
 Let’s look at another error scenario where the failure originates from **Canister B**, specifically due to its function trapping.
 
@@ -260,7 +257,7 @@ ic_cdk::export_candid!();
 
 Re-deploy `Canister B`, then call `call_do_nothing` again from `Canister A`, passing `Canister B`’s principal as before. You will observe that the inter-canister call now fails with an error message containing **“Intentional Trap”**, which is propagated from the callee canister.
 
-![Screenshot 2025-08-29 at 00.46.31.png](inter-canister-calls/9e293233-28b8-461e-a35a-eac1e14b46da.png)
+![Screenshot 2025-08-29 at 00.46.31.png](.gitbook/assets/9e293233-28b8-461e-a35a-eac1e14b46da.png)
 
 The error message that the called canister returns is part of the `Err(CallFailed)` result of the inter-canister call.
 

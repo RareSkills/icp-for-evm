@@ -1,6 +1,6 @@
 # Decoding and Encoding Inter-Canister Arguments
 
-When an inter-canister call succeeds, the returned value is not immediately available in a usable Rust type. Instead, the response is wrapped inside `Ok(Response)` and encoded using Candid, the serialization format used by the Internet Computer. 
+When an inter-canister call succeeds, the returned value is not immediately available in a usable Rust type. Instead, the response is wrapped inside `Ok(Response)` and encoded using Candid, the serialization format used by the Internet Computer.
 
 To access the actual value, we must first unwrap the `Ok(Response)` to obtain the raw Candid-encoded data (`Response`), and then deserialize it into the expected Rust type. In this article, we walk through this process step by step, using the `.candid::<Type>()` method to decode the response from an inter-canister call.
 
@@ -21,7 +21,7 @@ This change exposes a new update method, `ret_val()`, which returns a fixed `u64
 
 After adding the function, generate the Candid UI and deploy the canister:
 
-![Screenshot 2025-08-29 at 15.09.35.png](decoding-and-encoding-inter-canister-arguments/screenshot-2025-08-29-at-15.09.35.png)
+![Screenshot 2025-08-29 at 15.09.35.png](.gitbook/assets/screenshot-2025-08-29-at-15.09.35.png)
 
 We’ll now call this method from `Canister A` and decode its return value. Recall that inter-canister calls return Candid-encoded data wrapped inside of `Ok(Response)`. To extract the value, we need perform two steps:
 
@@ -67,11 +67,11 @@ ic_cdk::export_candid!();
 
 Deploy the Canister A and Call the `inter_canister` function from candid UI.
 
-![Screenshot 2025-12-31 at 17.46.21.png](decoding-and-encoding-inter-canister-arguments/screenshot-2025-12-31-at-17.46.21.png)
+![Screenshot 2025-12-31 at 17.46.21.png](.gitbook/assets/screenshot-2025-12-31-at-17.46.21.png)
 
 The call should successfully return the value produced by Canister B, which is **21**.
 
-## **Handling Decoding Failures with .candid::<Type>()**
+## **Handling Decoding Failures with .candid::()**
 
 In the previous example, the response was successfully decoded into a `u64`. In practice, however, decoding can fail—for example, when the expected type does not match the actual return type. For this reason, the `.candid::<Type>()` method returns a `Result` as well, allowing us to handle decoding failures explicitly.
 
@@ -90,7 +90,7 @@ To see what happens when decoding fails, let’s intentionally introduce a type 
 
 ### **Failed Decoding data example**
 
-`Callee`'s function `ret_val` returns a `u64`, but let’s try to decode the data into a `bool` by changing `.candid::<u64>` to `.candid::<bool>`, and the return value of the function to a `bool`.
+`Callee`'s function `ret_val` returns a `u64`, but let’s try to decode the data into a `bool` by changing `.candid::<u64>` to `.candid::<bool>`, and the return value of the function to a `bool`.
 
 ```rust
 use ic_cdk::call::Call
@@ -116,7 +116,7 @@ async fn inter_canister_call(callee: Principal) -> bool {
 
 The function fails with an error message: ‘**Failed to decode data’**
 
-![Screenshot 2025-08-28 at 16.42.59.png](decoding-and-encoding-inter-canister-arguments/screenshot-2025-08-28-at-16.42.59.png)
+![Screenshot 2025-08-28 at 16.42.59.png](.gitbook/assets/screenshot-2025-08-28-at-16.42.59.png)
 
 The error is caused in this line of code:
 
@@ -132,15 +132,9 @@ The `.candid::<Type>()` method allows you to specify the **exact Rust type** you
 
 Below are a few common examples:
 
-- **Decoding a u64 value**
-Use this when the callee returns an unsigned 64-bit integer:
-`.candid::<u64>()`
-- **Decoding a String value**
-Use this when the callee returns a textual value:
-`.candid::<String>()`
-- **Decoding a bool value**
-Use this when the callee returns a boolean:
-`.candid::<bool>()`
+* **Decoding a u64 value** Use this when the callee returns an unsigned 64-bit integer: `.candid::<u64>()`
+* **Decoding a String value** Use this when the callee returns a textual value: `.candid::<String>()`
+* **Decoding a bool value** Use this when the callee returns a boolean: `.candid::<bool>()`
 
 ## **Passing Arguments in Inter-Canister Calls**
 
@@ -157,7 +151,7 @@ fn sum(a: u64, b: u64) -> u64 {
 ic_cdk::export_candid!();
 ```
 
-To call `sum()` from another canister, we include the arguments using `.with_args().`  as shown below:
+To call `sum()` from another canister, we include the arguments using `.with_args().` as shown below:
 
 ```rust
 use candid::Principal;
@@ -190,7 +184,7 @@ The arguments are provided as a tuple reference, with each value matching the ca
 
 When invoked, this call correctly encodes the arguments, executes the `sum()` method in the callee, and decodes the returned value.
 
-![Screenshot 2025-08-29 at 00.59.04.png](decoding-and-encoding-inter-canister-arguments/screenshot-2025-08-29-at-00.59.04.png)
+![Screenshot 2025-08-29 at 00.59.04.png](.gitbook/assets/screenshot-2025-08-29-at-00.59.04.png)
 
 Just like return values, argument encoding is **type-sensitive**. If the provided arguments do not match the callee’s expected types, the inter-canister call will fail.
 
@@ -224,7 +218,7 @@ ic_cdk::export_candid!();
 
 Because the argument types do not match the callee’s signature, the call traps with an error indicating that the inter-canister call failed.
 
-![Screenshot 2025-08-29 at 01.03.08.png](decoding-and-encoding-inter-canister-arguments/screenshot-2025-08-29-at-01.03.08.png)
+![Screenshot 2025-08-29 at 01.03.08.png](.gitbook/assets/screenshot-2025-08-29-at-01.03.08.png)
 
 ### Conclusion
 

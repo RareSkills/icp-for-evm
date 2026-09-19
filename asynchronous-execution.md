@@ -4,9 +4,9 @@ In Ethereum, all transactions execute atomically. Transactions that are atomic e
 
 ## Execution is Atomic If It Stays Within The Canister
 
-Canister functions execute atomically, but only if the execution stays **within the same canister** and it make a call any other asynchronous system APIs such as the `Call` system API.
+Canister functions execute atomically, but only if the execution stays **within the same canister** and it make a call any other asynchronous system APIs such as the `Call` system API.
 
-In an atomic function or execution, state changes are committed **last**, only if the function completes successfully. Conceptually, it looks like this:
+In an atomic function or execution, state changes are committed **last**, only if the function completes successfully. Conceptually, it looks like this:
 
 ```
 							   (provisional)                    (finalized)
@@ -15,7 +15,7 @@ In an atomic function or execution, state changes are committed **last**, only 
 start                                        end    
 ```
 
-During execution, all state changes are **provisional** (temporary). They are only finalized and committed to the blockchain when the function finishes without panicking or trapping.
+During execution, all state changes are **provisional** (temporary). They are only finalized and committed to the blockchain when the function finishes without panicking or trapping.
 
 To understand this behavior more concretely, consider the `double_increment()` function below, which executes atomically because all of its execution stays within the same canister and no inter-canister calls are made.
 
@@ -37,15 +37,13 @@ fn double_increment()-> bool{
 }
 ```
 
-If an atomic function panics or traps mid-execution, then **none** of its state changes are committed:
+If an atomic function panics or traps mid-execution, then **none** of its state changes are committed:
 
 ```
 |----- state changes -----X------|   ✕ no state is committed
 ^                         ^      ^       
 start                   panic   end    
 ```
-
- 
 
 Now consider a version of `double_increment()` that always reverts using `assert!`. Because the function panics before completing, none of its state changes are finalized, and `X` remains `0`.
 
@@ -141,7 +139,7 @@ To observe this behavior in practice, deploy `Canister-A` and `Canister-B` and f
 
 Even though `foo()` always panics after the inter-canister call, `get_x()` returns **1**, showing that the increment to `X` was **not** rolled back.
 
-![Screenshot 2025-11-25 at 19.10.34.png](asynchronous-execution/screenshot-2025-11-25-at-19.10.34.png)
+![Screenshot 2025-11-25 at 19.10.34.png](.gitbook/assets/screenshot-2025-11-25-at-19.10.34.png)
 
 Atomic execution guarantees an `all-or-nothing` outcome: either all state changes are committed, or none of them are. In this example, however, the state change to `X` survived even though `foo()` panicked at the end of its execution. This shows that `foo()` does not execute atomically, because it performs an inter-canister call.
 
@@ -161,9 +159,9 @@ Asynchronous functions behave differently. When a function performs an inter-can
 
 For a function that performs a single inter-canister call, these commit points are:
 
-- **Before the inter-canister call**, all state changes made so far in the caller canister are finalized and committed.
-- **When the callee canister completes successfully,** the callee canister commits its state changes.
-- W**hen the caller function finishes execution successfully**, any remaining state changes made after the inter-canister call are finalized and committed in the caller canister.
+* **Before the inter-canister call**, all state changes made so far in the caller canister are finalized and committed.
+* **When the callee canister completes successfully,** the callee canister commits its state changes.
+* W**hen the caller function finishes execution successfully**, any remaining state changes made after the inter-canister call are finalized and committed in the caller canister.
 
 ```
 													(Inter-canister call)
@@ -174,7 +172,7 @@ Start |--- **state changes** --|-- **state changes** --|-- **state changes** --|
                          Point               Point               Point
 ```
 
-Rather than executing as one atomic transaction, the function can be understood as a sequence of three consecutive atomic executions. 
+Rather than executing as one atomic transaction, the function can be understood as a sequence of three consecutive atomic executions.
 
 ### State-changes are committed before the inter-canister call is made
 
@@ -239,7 +237,7 @@ async fn foo()(callee: Principal) -> bool {
 ic_cdk::export_candid!();
 ```
 
-Because the panic happens before the `await`, the whole first segment aborts and its state changes are not committed.
+Because the panic happens before the `await`, the whole first segment aborts and its state changes are not committed.
 
 ### State-changes are committed when the inter-canister call returns successfully
 
@@ -295,14 +293,14 @@ fn bar() -> bool {
 ic_cdk::export_candid!();
 ```
 
-If the inter-canister call itself panics or traps inside `B::bar()`, then **no** state changes are committed in canister `B`, and `A::foo()` continues executing from the `await` with an error result.
+If the inter-canister call itself panics or traps inside `B::bar()`, then **no** state changes are committed in canister `B`, and `A::foo()` continues executing from the `await` with an error result.
 
 ### Reverts after an inter-canister call returns will not roll back the previous state-changes
 
-If `foo()` reverts **after** the inter-canister call, and `B::bar()` has already executed successfully, then:
+If `foo()` reverts **after** the inter-canister call, and `B::bar()` has already executed successfully, then:
 
-- The state changes in `B` are **not** rolled back.
-- The state changes made in `A` **before** the inter-canister call are also **not** rolled back.
+* The state changes in `B` are **not** rolled back.
+* The state changes made in `A` **before** the inter-canister call are also **not** rolled back.
 
 ```rust
 use std::cell::RefCell;
@@ -361,7 +359,7 @@ async fn call_b()->bool{
 } 
 ```
 
-If we revert **after** `X += 2;`, like this
+If we revert **after** `X += 2;`, like this
 
 ```rust
 static x : u64 = 0;
@@ -384,16 +382,16 @@ async fn call_b()->bool{
 } 
 ```
 
-Only the state changes from the **current** segment (`X += 2;`) are rolled back. The earlier commits:
+Only the state changes from the **current** segment (`X += 2;`) are rolled back. The earlier commits:
 
-- `X += 1;` (in canister A, before the call), and
-- `Y += 1;` (in canister B, inside `bar()`)
+* `X += 1;` (in canister A, before the call), and
+* `Y += 1;` (in canister B, inside `bar()`)
 
 remain permanently applied.
 
 We can think of how an asynchronous function executes with one inter-canister call as three separate atomic executions that make up the entire transaction **M1**, **M2**, **M3**.
 
-![Screenshot 2025-11-06 at 11.38.57.png](asynchronous-execution/90286fce-dd62-4efa-83bd-b7992cf88acb.png)
+![Screenshot 2025-11-06 at 11.38.57.png](.gitbook/assets/90286fce-dd62-4efa-83bd-b7992cf88acb.png)
 
 Each message executes atomically and commits its own state changes independently. Reverting an atomic segment would only revert its state-changes, but it would not revert the previous segments if any.
 
@@ -421,10 +419,10 @@ async fn call_b()->bool{
 } 
 ```
 
-- The first atomic execution is before the first inter-canister call.
-- The second is at the first inter-canister call.
-- The third is the codes in between the inter-canister calls.
-- The fourth is the second inter-canister call and
-- lastly, the codes after the second inter-canister call where the function finishes execution.
+* The first atomic execution is before the first inter-canister call.
+* The second is at the first inter-canister call.
+* The third is the codes in between the inter-canister calls.
+* The fourth is the second inter-canister call and
+* lastly, the codes after the second inter-canister call where the function finishes execution.
 
 While waiting for the inter-canister call, the canister does not stall and block other transactions. It can process other transactions. We’ll discuss the non-blocking property of canisters in the next article.

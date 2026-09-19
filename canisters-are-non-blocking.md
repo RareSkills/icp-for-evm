@@ -1,10 +1,10 @@
 # Canisters are Non-Blocking
 
-When a canister makes an inter-canister call and waits for the response, it **does not block** or **halt execution**. Instead, the canister keeps executing **other transactions** until the inter-canister call returns.
+When a canister makes an inter-canister call and waits for the response, it **does not block** or **halt execution**. Instead, the canister keeps executing **other transactions** until the inter-canister call returns.
 
 The diagram below illustrates this behavior. The canister begins processing **`Tx₁`**, which performs an inter-canister call. While `Tx₁` is waiting for the response, the canister continues processing **`Tx₂`, `Tx₃`, and `Tx₄`** sequentially. Once the response arrives, the canister resumes execution of **`Tx₁`**.
 
-![Screenshot 2025-11-20 at 20.45.36.png](canisters-are-non-blocking/screenshot-2025-11-20-at-20.45.36.png)
+![Screenshot 2025-11-20 at 20.45.36.png](.gitbook/assets/screenshot-2025-11-20-at-20.45.36.png)
 
 In this article, we explore what non-blocking execution means in practice. Specifically, we demonstrate how concurrent calls can observe and modify intermediate canister state, and why this requires extra care when writing asynchronous functions.
 
@@ -14,8 +14,8 @@ To see how non-blocking execution affects visibility of state, consider two cani
 
 Canister **A** exposes an asynchronous function `foo()` that increments a state variable `X` twice:
 
-- Once **before** making an inter-canister call to `B.bar()`, and
-- Once **after** that call returns.
+* Once **before** making an inter-canister call to `B.bar()`, and
+* Once **after** that call returns.
 
 ```rust
 use std::cell::RefCell;
@@ -81,9 +81,9 @@ Now suppose **Alice** calls `A.foo()` when `X = 0`.
 
 At this point, the key observation is that **the increment to X has already been committed**. While `foo()` is suspended, the canister is free to process other incoming messages.
 
-During this waiting period, **Bob** can call `get_x()` and observe the current state of the canister. His call will return **`1`**, reflecting the state committed *before* the inter-canister call.
+During this waiting period, **Bob** can call `get_x()` and observe the current state of the canister. His call will return **`1`**, reflecting the state committed _before_ the inter-canister call.
 
-![Screenshot 2025-11-20 at 20.49.11.png](canisters-are-non-blocking/screenshot-2025-11-20-at-20.49.11.png)
+![Screenshot 2025-11-20 at 20.49.11.png](.gitbook/assets/screenshot-2025-11-20-at-20.49.11.png)
 
 You can reproduce this behavior yourself:
 
@@ -93,18 +93,18 @@ You can reproduce this behavior yourself:
 
 It should return `1` as shown below:
 
-![Screenshot 2025-11-28 at 12.58.34.png](canisters-are-non-blocking/screenshot-2025-11-28-at-12.58.34.png)
+![Screenshot 2025-11-28 at 12.58.34.png](.gitbook/assets/screenshot-2025-11-28-at-12.58.34.png)
 
 Once `B.bar()` finishes and `foo()` resumes, `foo()` increments X again and completes. A subsequent call to `get_x()` should now returns 2.
 
-![Screenshot 2025-11-29 at 16.31.19.png](canisters-are-non-blocking/screenshot-2025-11-29-at-16.31.19.png)
+![Screenshot 2025-11-29 at 16.31.19.png](.gitbook/assets/screenshot-2025-11-29-at-16.31.19.png)
 
-- The **first** `get_x()` runs while `foo()` is suspended and observes the **intermediate state**.
-- The **second** `get_x()` runs after `foo()` finishes and observes the **final state**.
+* The **first** `get_x()` runs while `foo()` is suspended and observes the **intermediate state**.
+* The **second** `get_x()` runs after `foo()` finishes and observes the **final state**.
 
 This example demonstrates an important property of the Internet Computer’s execution model: **state changes made before an await are immediately visible to other calls**.
 
-In the next section, we’ll see that other calls can do more than merely *observe* this intermediate state — they can **modify it**, causing an asynchronous function to resume in a different state than the one it originally started with.
+In the next section, we’ll see that other calls can do more than merely _observe_ this intermediate state — they can **modify it**, causing an asynchronous function to resume in a different state than the one it originally started with.
 
 ## **Intermediate State Can Be Modified While an Async Call Is Suspended**
 
@@ -112,14 +112,14 @@ So far, we’ve seen that state changes made **before** an await become immediat
 
 Revisiting the previous example, suppose **Bob** calls `increment()` while **Alice’s** call to `foo()` is still waiting on `B.bar()`.
 
-![Screenshot 2025-11-20 at 20.50.03.png](canisters-are-non-blocking/screenshot-2025-11-20-at-20.50.03.png)
+![Screenshot 2025-11-20 at 20.50.03.png](.gitbook/assets/screenshot-2025-11-20-at-20.50.03.png)
 
 Here is the sequence of events:
 
-- Alice calls `foo()` when `X = 0`.
-- `foo()` increments X to 1 and then awaits the response from `B.bar()`.
-- While `foo()` is suspended, Bob calls `increment()`, updating `X` from 1 to 2.
-- When `foo()` resumes, it observes the **new** state (`X = 2`) and increments it again, resulting in `X = 3`.
+* Alice calls `foo()` when `X = 0`.
+* `foo()` increments X to 1 and then awaits the response from `B.bar()`.
+* While `foo()` is suspended, Bob calls `increment()`, updating `X` from 1 to 2.
+* When `foo()` resumes, it observes the **new** state (`X = 2`) and increments it again, resulting in `X = 3`.
 
 The key takeaway is that an asynchronous function on the Internet Computer does **not** execute against a single, stable snapshot of canister state. Any state that was committed before an await can be **changed by other messages** before the function resumes.
 
@@ -133,8 +133,8 @@ In the previous section, we saw that other calls can **modify** a canister’s s
 
 We extend canister **A** to record two snapshots of the state variable X:
 
-- `x_before`: the value of X **immediately before** the inter-canister call, and
-- `x_after`: the value of X **immediately after** the call returns.
+* `x_before`: the value of X **immediately before** the inter-canister call, and
+* `x_after`: the value of X **immediately after** the call returns.
 
 If these two values differ, it means that some other transaction modified X while `foo()` was suspended. In that case, `foo()` returns false early instead of proceeding.
 
@@ -185,7 +185,7 @@ ic_cdk::export_candid!()
 
 To observe this behavior, redeploy canister **A** and call `foo()`. While `foo()` is waiting on `B.bar()`, call `increment()` from another identity. When `foo()` resumes, it will detect that `x_before ≠ x_after` and immediately return false.
 
-![Screenshot 2025-11-28 at 13.02.59.png](canisters-are-non-blocking/screenshot-2025-11-28-at-13.02.59.png)
+![Screenshot 2025-11-28 at 13.02.59.png](.gitbook/assets/screenshot-2025-11-28-at-13.02.59.png)
 
 This example highlights a crucial implication of the Internet Computer’s non-blocking execution model: **local variables that capture state before an await can become stale by the time execution resumes**.
 
@@ -226,9 +226,9 @@ async fn withdraw(amount: u64) -> Result<(), Error> {
 
 While the function is suspended at the await, other messages may execute:
 
-- another user might deposit,
-- another withdrawal might already have reduced the balance,
-- an administrative operation may have updated state.
+* another user might deposit,
+* another withdrawal might already have reduced the balance,
+* an administrative operation may have updated state.
 
 When the function resumes, the local variable balance may no longer reflect the canister’s actual state, yet it is still being used to compute the new balance. This kind of bug is subtle, easy to miss in review, and difficult to detect in testing.
 
@@ -236,8 +236,7 @@ To write correct asynchronous canister code, we must instead **acknowledge that 
 
 One common approach is to **anticipate the state change** before making the inter-canister call, then either:
 
-• keep the change if the call succeeds, or
-• explicitly roll it back if the call fails.
+• keep the change if the call succeeds, or • explicitly roll it back if the call fails.
 
 Because the state may continue to change while the function is suspended, rollback logic must also **re-read the current state** to ensure that only the intended changes are undone.
 
@@ -275,8 +274,8 @@ async fn withdraw(amount: u64) -> bool {
 }
 ```
 
-This pattern acknowledges that **state changes may be committed before the await**, avoids relying on **stale local variables** after an inter-canister call, and correctly **recomputes and rolls back** state when the call fails.
+This pattern acknowledges that **state changes may be committed before the await**, avoids relying on **stale local variables** after an inter-canister call, and correctly **recomputes and rolls back** state when the call fails.
 
-One of the most complex concepts to grasp is ICP’s asynchronous execution model. Now that we have covered it, when performing an HTTP Outcall, which is an asynchronous System API that allows canisters to perform HTTP requests to web2 APIs, it also follows the pattern above. 
+One of the most complex concepts to grasp is ICP’s asynchronous execution model. Now that we have covered it, when performing an HTTP Outcall, which is an asynchronous System API that allows canisters to perform HTTP requests to web2 APIs, it also follows the pattern above.
 
 In the next article, we’ll learn how to send Cycles between canisters, which is similar to sending Ether between Solidity contracts.

@@ -10,53 +10,53 @@ While this course is taking a short break, you are well-equipped to keep explori
 
 Overview:
 
-- https://docs.internetcomputer.org/building-apps/network-features/using-http/https-outcalls/overview
+* https://docs.internetcomputer.org/building-apps/network-features/using-http/https-outcalls/overview
 
 Make GET requests
 
-- https://docs.internetcomputer.org/building-apps/network-features/using-http/https-outcalls/post
-- https://docs.internetcomputer.org/building-apps/network-features/using-http/https-outcalls/get
+* https://docs.internetcomputer.org/building-apps/network-features/using-http/https-outcalls/post
+* https://docs.internetcomputer.org/building-apps/network-features/using-http/https-outcalls/get
 
 Make POST requests:
 
-- https://docs.internetcomputer.org/building-apps/network-features/using-http/https-outcalls/post
-- https://github.com/dfinity/examples/tree/master/rust/send_http_post
+* https://docs.internetcomputer.org/building-apps/network-features/using-http/https-outcalls/post
+* https://github.com/dfinity/examples/tree/master/rust/send\_http\_post
 
 ### **ICP Blockchain Architecture**
 
-Subnet architecture (independent replicated networks)
+Subnet architecture (independent replicated networks)
 
-- https://docs.internetcomputer.org/building-apps/essentials/network-overview
+* https://docs.internetcomputer.org/building-apps/essentials/network-overview
 
-State and transactions are private by default 
+State and transactions are private by default&#x20;
 
-- https://docs.internetcomputer.org/building-apps/security/misc#data-confidentiality-on-icp
+* https://docs.internetcomputer.org/building-apps/security/misc#data-confidentiality-on-icp
 
-Each subnet has a subnet public key (used to verify its signatures/certificates)
+Each subnet has a subnet public key (used to verify its signatures/certificates)
 
-- https://learn.internetcomputer.org/hc/en-us/articles/34209540682644-Subnet-Keys-and-Subnet-Signatures
+* https://learn.internetcomputer.org/hc/en-us/articles/34209540682644-Subnet-Keys-and-Subnet-Signatures
 
 Consensus uses threshold cryptography (Block history is no longer needed, we can verify blocks through each subnet’s public keys)
 
-- https://learn.internetcomputer.org/hc/en-us/articles/34207558615956-Consensus
+* https://learn.internetcomputer.org/hc/en-us/articles/34207558615956-Consensus
 
 ### **Threshold Signatures ECDSA**
 
 Overview:
 
-- https://docs.internetcomputer.org/building-apps/network-features/signatures/t-ecdsa
+* https://docs.internetcomputer.org/building-apps/network-features/signatures/t-ecdsa
 
 Derive an address (key id + derivation path)
 
-- https://docs.internetcomputer.org/building-apps/network-features/signatures/t-ecdsa#obtaining-public-keys
+* https://docs.internetcomputer.org/building-apps/network-features/signatures/t-ecdsa#obtaining-public-keys
 
 Create signed artifacts
 
-- https://docs.internetcomputer.org/building-apps/network-features/signatures/t-ecdsa#signing-messages-and-transactions
+* https://docs.internetcomputer.org/building-apps/network-features/signatures/t-ecdsa#signing-messages-and-transactions
 
-Verify signature of the signed artifact 
+Verify signature of the signed artifact
 
-- https://docs.internetcomputer.org/building-apps/chain-fusion/ethereum/using-eth/signing-transactions#build-a-transaction
+* https://docs.internetcomputer.org/building-apps/chain-fusion/ethereum/using-eth/signing-transactions#build-a-transaction
 
 ## The EVM RPC Canister and Timers
 
@@ -64,26 +64,26 @@ Verify signature of the signed artifact
 
 Query Ethereum Events and Transactions
 
-- https://docs.internetcomputer.org/building-apps/chain-fusion/ethereum/evm-rpc/evm-rpc-canister#get-the-latest-ethereum-block-info
+* https://docs.internetcomputer.org/building-apps/chain-fusion/ethereum/evm-rpc/evm-rpc-canister#get-the-latest-ethereum-block-info
 
 How to send Ethereum Transactions
 
-- https://docs.internetcomputer.org/building-apps/chain-fusion/ethereum/evm-rpc/evm-rpc-canister#get-the-latest-ethereum-block-info
+* https://docs.internetcomputer.org/building-apps/chain-fusion/ethereum/evm-rpc/evm-rpc-canister#get-the-latest-ethereum-block-info
 
 ### Timers
 
-- https://docs.internetcomputer.org/building-apps/network-features/periodic-tasks-timers#timers
-- https://github.com/AymericRT/On-ChainOracle
+* https://docs.internetcomputer.org/building-apps/network-features/periodic-tasks-timers#timers
+* https://github.com/AymericRT/On-ChainOracle
 
 ## Cross-Chain Projects
 
 ### `Project:` Build a financial subscription
 
-- Canisters as a financial subscription service
-- Credits user balance through a token approval from the owner to the canister
-- https://github.com/AymericRT/SubscriptioinTimerICP
+* Canisters as a financial subscription service
+* Credits user balance through a token approval from the owner to the canister
+* https://github.com/AymericRT/SubscriptioinTimerICP
 
 ### `Project` : Cross-Chain Messaging Protocol
 
-- Utilize canisters to relay messages from a smart contract on Chain A to a smart contract on Chain B
-- https://github.com/AymericRT/ICBridge?tab=readme-ov-file
+* Utilize canisters to relay messages from a smart contract on Chain A to a smart contract on Chain B
+* https://github.com/AymericRT/ICBridge?tab=readme-ov-file

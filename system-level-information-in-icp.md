@@ -10,9 +10,9 @@ use ic_cdk::api;
 
 In this chapter, we’ll explore the most commonly used System APIs and see how they map to familiar Solidity concepts. Specifically, we’ll learn how to:
 
-- Identify who is calling a canister function using `msg_caller()`,
-- retrieve the canister’s own principal with `canister_self()`, and
-- work with blockchain time using `time()`.
+* Identify who is calling a canister function using `msg_caller()`,
+* retrieve the canister’s own principal with `canister_self()`, and
+* work with blockchain time using `time()`.
 
 To follow along with the examples in this chapter, create a new Rust canister project called `system_api` to follow along the code examples.
 
@@ -20,11 +20,11 @@ To follow along with the examples in this chapter, create a new Rust canister pr
 dfx new system_api --type rust --no-frontend
 ```
 
-## Using `msg_caller()`  to Identify the Caller
+## Using `msg_caller()` to Identify the Caller
 
-`msg_caller()` (like Solidity’s `msg.sender`) returns the `Principal` of the function caller.
+`msg_caller()` (like Solidity’s `msg.sender`) returns the `Principal` of the function caller.
 
-To use `msg_caller` import it from the `ic_cdk::api` module. Also, import `Principal` from the `candid` crate:
+To use `msg_caller` import it from the `ic_cdk::api` module. Also, import `Principal` from the `candid` crate:
 
 ```rust
 use ic_cdk::api::msg_caller; // import msg_caller
@@ -46,13 +46,13 @@ fn get_msg_caller() -> Principal {
 
 Now, deploy the canister and call `get_msg_caller()` from the Candid UI. Since the call is made without an authenticated identity, the returned value will be the anonymous principal (`2vxsx-fae`).
 
-![Screenshot 2025-08-18 at 13.04.58.png](system-level-information-in-icp/screenshot-2025-08-18-at-13.04.58.png)
+![Screenshot 2025-08-18 at 13.04.58.png](.gitbook/assets/screenshot-2025-08-18-at-13.04.58.png)
 
-Every call carries a principal. If the message isn’t signed, the system assigns the anonymous principal `2vxsx-fae` as the caller’s principal and skips signature verification. You must decide whether to accept anonymous calls. If not, reject them explicitly:
+Every call carries a principal. If the message isn’t signed, the system assigns the anonymous principal `2vxsx-fae` as the caller’s principal and skips signature verification. You must decide whether to accept anonymous calls. If not, reject them explicitly:
 
 ### Storing the Last Caller’s Principal
 
-So far, we’ve used `msg_caller()` to read the principal of the caller for a single function call. In many real-world canisters, however, we also want to *store* this information in the canister’s state—for example, to track who last interacted with the contract or to implement access-control logic.
+So far, we’ve used `msg_caller()` to read the principal of the caller for a single function call. In many real-world canisters, however, we also want to _store_ this information in the canister’s state—for example, to track who last interacted with the contract or to implement access-control logic.
 
 Let’s look at a simple example that records the principal of the last caller and exposes it through a query function.
 
@@ -109,7 +109,7 @@ dfx canister call system_api_backend get_last_caller
 
 The `LAST_CALLER`’s value would be the principal of dfx’s developer identity. We could also re-confirm it through the **Candid UI**:
 
-![Screenshot 2025-09-30 at 00.39.11.png](system-level-information-in-icp/screenshot-2025-09-30-at-00.39.11.png)
+![Screenshot 2025-09-30 at 00.39.11.png](.gitbook/assets/screenshot-2025-09-30-at-00.39.11.png)
 
 ### Rejecting Anonymous Callers
 
@@ -156,7 +156,7 @@ This will sends the request using an authenticated identity and updates `LAST_CA
 
 Next, call `set_last_caller()` from the Candid UI, which sends an unauthenticated request. You’ll observe that this call is ignored and does not update `LAST_CALLER`.
 
-![Screenshot 2025-09-30 at 00.52.59.png](system-level-information-in-icp/screenshot-2025-09-30-at-00.52.59.png)
+![Screenshot 2025-09-30 at 00.52.59.png](.gitbook/assets/screenshot-2025-09-30-at-00.52.59.png)
 
 ## Initializing an Owner with the Deployer’s Principal
 
@@ -164,7 +164,7 @@ So far, we’ve used `msg_caller()` to identify who is calling a canister functi
 
 Ownership is typically established at deployment time by recording the principal of the canister deployer. Let’s see how to initialize an owner using the deployer’s principal.
 
-Clear out `lib.rs` and declare a static `RefCell<Principal>` initialized with the zero address.
+Clear out `lib.rs` and declare a static `RefCell<Principal>` initialized with the zero address.
 
 ```rust
 use std::cell::RefCell;
@@ -176,9 +176,7 @@ thread_local! {
 }
 ```
 
- 
-
-Next, add a constructor with `#[ic_cdk::init]` that sets `OWNER` to `msg_caller()`.
+Next, add a constructor with `#[ic_cdk::init]` that sets `OWNER` to `msg_caller()`.
 
 ```rust
 use std::cell::RefCell;
@@ -196,7 +194,7 @@ fn init() {
 }
 ```
 
-Lastly, add the `get_owner()` function. Since `Principal` is a **non-copy type**, returning it uses `.clone()`.
+Lastly, add the `get_owner()` function. Since `Principal` is a **non-copy type**, returning it uses `.clone()`.
 
 ```rust
 use candid::Principal;
@@ -238,7 +236,7 @@ generate-did <Canister_name> && dfx deploy
 
 `get_owner()` should return the principal of the identity that we deployed the contract with.
 
-![Screenshot 2025-08-18 at 18.55.44.png](system-level-information-in-icp/screenshot-2025-08-18-at-18.55.44.png)
+![Screenshot 2025-08-18 at 18.55.44.png](.gitbook/assets/screenshot-2025-08-18-at-18.55.44.png)
 
 ## Using `canister_self()` to Get Canister's Principal"
 
@@ -259,13 +257,13 @@ ic_cdk::export_candid!();
 
 Deploy the canister and generate the candid interface. Then, call the `get_self()` from the Candid UI. You should expect that at the top left, your **Canister ID** matches the function output.
 
-![Screenshot 2025-08-19 at 15.01.39.png](system-level-information-in-icp/screenshot-2025-08-19-at-15.01.39.png)
+![Screenshot 2025-08-19 at 15.01.39.png](.gitbook/assets/screenshot-2025-08-19-at-15.01.39.png)
 
-## System time: `time()`
+## System time: `time()`
 
 The system APIs we have interacted with have been related to identity—who is calling a function and which principal owns the canister. Another important piece of system-provided context is time. Many canisters rely on timestamps to record when events occur, enforce deadlines, or implement time-based logic.
 
-In ICP, the `time()` system API is conceptually to `block.timestamp` in Solidity, except that Solidity returns **seconds** since the Unix epoch (January 1, 1970), while ICP returns **nanoseconds** since the Unix epoch.
+In ICP, the `time()` system API is conceptually to `block.timestamp` in Solidity, except that Solidity returns **seconds** since the Unix epoch (January 1, 1970), while ICP returns **nanoseconds** since the Unix epoch.
 
 Here a simple example of a function returning `time()`:
 
@@ -288,9 +286,9 @@ The `time()` call always returns `u64` number. A raw result may look like this:
 
 To convert this timestamp into a human-readable format, you’ll need to use an external `time` crate.
 
-### Converting `time()` into a Human-Readable Timestamp
+### Converting `time()` into a Human-Readable Timestamp
 
-To convert the raw timestamp into a human-readable format, we first need to add an external dependency. 
+To convert the raw timestamp into a human-readable format, we first need to add an external dependency.
 
 Open your `Cargo.toml` file and add the following line to the `[dependencies]` section. This will imports the `time` crate, which provides date and time formatting utilities.
 
@@ -298,7 +296,7 @@ Open your `Cargo.toml` file and add the following line to the `[dependencies]` s
 time = { version = "0.3", features = ["formatting"] }
 ```
 
-![Screenshot 2025-08-18 at 13.09.33.png](system-level-information-in-icp/screenshot-2025-08-18-at-13.09.33.png)
+![Screenshot 2025-08-18 at 13.09.33.png](.gitbook/assets/screenshot-2025-08-18-at-13.09.33.png)
 
 With the dependency added, the next step is to import the `time` crate into your Rust canister code. Specifically, we’ll use the `OffsetDateTime` type, which allows us to convert a Unix timestamp into a human-readable date and time in string format:
 
@@ -306,7 +304,7 @@ With the dependency added, the next step is to import the `time` crate into your
 use time::OffsetDateTime;
 ```
 
-The function, `get_human_readable_time()` below converts the raw `time()` value into a human-readable date and time using the `OffsetDateTime` method.
+The function, `get_human_readable_time()` below converts the raw `time()` value into a human-readable date and time using the `OffsetDateTime` method.
 
 ```rust
 use ic_cdk::api::time;
@@ -324,28 +322,28 @@ ic_cdk::export_candid!();
 
 **Code Snippet Explanation**
 
-- `OffsetDateTime::from_unix_timestamp_nanos(time() as i128)` returns a `Result`, which is a type that represents either success `Ok` with a value or failure `Err` with an error (for example, if the timestamp is invalid).
-- `.unwrap()` in Rust forces that Result to give you its value — but if it’s an error, it panics and stops execution. Finally,
-- `.to_string()` converts the extracted value into a human-readable String output.
+* `OffsetDateTime::from_unix_timestamp_nanos(time() as i128)` returns a `Result`, which is a type that represents either success `Ok` with a value or failure `Err` with an error (for example, if the timestamp is invalid).
+* `.unwrap()` in Rust forces that Result to give you its value — but if it’s an error, it panics and stops execution. Finally,
+* `.to_string()` converts the extracted value into a human-readable String output.
 
-An example result from `get_human_readable_time()`:
+An example result from `get_human_readable_time()`:
 
-![Screenshot 2025-08-19 at 15.37.51.png](system-level-information-in-icp/screenshot-2025-08-19-at-15.37.51.png)
+![Screenshot 2025-08-19 at 15.37.51.png](.gitbook/assets/screenshot-2025-08-19-at-15.37.51.png)
 
 The date format is:
 
-- `YYYY` — 4-digit year
-- `MM` — 2-digit month
-- `DD` — 2-digit day
-- `HH` — 24-hour format hour
-- `MM` — minutes
-- `SS` — seconds
-- `.ffffff` — microseconds
-- `±HH:MM:SS` — UTC offset
+* `YYYY` — 4-digit year
+* `MM` — 2-digit month
+* `DD` — 2-digit day
+* `HH` — 24-hour format hour
+* `MM` — minutes
+* `SS` — seconds
+* `.ffffff` — microseconds
+* `±HH:MM:SS` — UTC offset
 
 ### Manipulating Timestamps: One Minute Later
 
-You can also manipulate the timestamp by adding a duration. For example, here’s how to output **one minute later** than the current consensus time. 
+You can also manipulate the timestamp by adding a duration. For example, here’s how to output **one minute later** than the current consensus time.
 
 First declare a one minute constant in nano seconds.
 
@@ -378,7 +376,7 @@ ic_cdk::export_candid!();
 
 This returns the current Unix time + one minute (nanoseconds).
 
-If you want to output a human readable time for `one_min_later`, format it using the `OffsetDateTime` method from the *time* crate and change the function return type to `String`.
+If you want to output a human readable time for `one_min_later`, format it using the `OffsetDateTime` method from the _time_ crate and change the function return type to `String`.
 
 ```rust
 use ic_cdk::api::time;
@@ -405,6 +403,6 @@ ic_cdk::export_candid!();
 
 System APIs are how a canister interacts with the IC runtime to access runtime context and system features that aren’t passed in as function arguments (for example, the caller’s identity, the current time, and cycles-related information).
 
-Inter-canister calls are also powered by the System API. In Rust, the CDK exposes this through the `Call` builder, which we’ll learn in Module 4.
+Inter-canister calls are also powered by the System API. In Rust, the CDK exposes this through the `Call` builder, which we’ll learn in Module 4.
 
 In the next article, we’ll cover error handling—how to return errors or trap to abort execution, and how to structure code so failures don’t leave your canister in an inconsistent state.
